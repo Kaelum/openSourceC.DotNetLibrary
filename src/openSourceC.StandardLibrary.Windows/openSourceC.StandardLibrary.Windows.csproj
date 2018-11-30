@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\.resources\License.openSourceC.FrameworkLibrary.html" Link="Properties\License.openSourceC.FrameworkLibrary.html" />
+    <EmbeddedResource Include="..\.resources\License.openSourceC.StandardLibrary.html" Link="Properties\License.openSourceC.StandardLibrary.html" />
   </ItemGroup>
 
   <ItemGroup>
