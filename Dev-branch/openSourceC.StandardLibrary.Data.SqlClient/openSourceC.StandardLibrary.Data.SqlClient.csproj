@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Company>WGB Enterprises</Company>
+    <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
+    <Authors>William Bosacker</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\.resources\License.openSourceC.FrameworkLibrary.html" Link="Properties\License.openSourceC.FrameworkLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\openSourceC.StandardLibrary.Core\openSourceC.StandardLibrary.Core.csproj" />
+    <ProjectReference Include="..\openSourceC.StandardLibrary.Data\openSourceC.StandardLibrary.Data.csproj" />
+  </ItemGroup>
+
+</Project>

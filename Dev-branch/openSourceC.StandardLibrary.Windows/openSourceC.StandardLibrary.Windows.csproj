@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Company>WGB Enterprises</Company>
+    <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
+    <Authors>William Bosacker</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\.resources\License.openSourceC.FrameworkLibrary.html" Link="Properties\License.openSourceC.FrameworkLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\openSourceC.StandardLibrary.Core\openSourceC.StandardLibrary.Core.csproj" />
+  </ItemGroup>
+
+</Project>
