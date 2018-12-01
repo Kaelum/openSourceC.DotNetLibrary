@@ -39,7 +39,7 @@ namespace openSourceC.StandardLibrary {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("openSourceC.StandardLibrary.Core.SR", typeof(SR).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("openSourceC.StandardLibrary.SR", typeof(SR).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

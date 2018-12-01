@@ -204,6 +204,7 @@ namespace openSourceC.StandardLibrary.Data.SqlClient
 		#endregion
 
 #if SUPPORT_SQL_FILESTREAM
+
 		#region SqlFileStream
 
 		/// <summary>
@@ -269,9 +270,9 @@ namespace openSourceC.StandardLibrary.Data.SqlClient
 		}
 
 		#endregion
-#endif
 
-#if SUPPORT_ASYNC_EXECUTE_READER && SUPPORT_SQL_NOTIFICATION
+#if SUPPORT_ASYNC_EXECUTE_READER
+
 		#region SqlNotificationRequest
 
 		/// <summary>
@@ -488,6 +489,9 @@ namespace openSourceC.StandardLibrary.Data.SqlClient
 		}
 
 		#endregion
+
+#endif
+
 #endif
 
 		#region Transaction Methods

@@ -139,6 +139,7 @@ namespace openSourceC.StandardLibrary.Data.SqlClient
 		}
 
 		#endregion
+
 #endif
 
 		#region SqlDependency

@@ -2,7 +2,6 @@
 
 namespace openSourceC.StandardLibrary.Data.SqlClient
 {
-#if SUPPORT_SQL_NOTIFICATION
 	/// <summary>
 	///		Represents the method that will handle a service broker receive event when the event
 	///		provides data.
@@ -59,5 +58,4 @@ namespace openSourceC.StandardLibrary.Data.SqlClient
 		/// <summary></summary>
 		public string MessageBody { get; set; }
 	}
-#endif
 }
