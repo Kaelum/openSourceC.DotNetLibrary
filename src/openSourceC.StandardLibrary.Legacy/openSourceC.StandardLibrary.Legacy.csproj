@@ -3,47 +3,35 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
-    <LangVersion>latest</LangVersion>
-    <Company>WGB Enterprises</Company>
-    <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
-    <Authors>William Bosacker</Authors>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.StandardLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\.resources\License.openSourceC.StandardLibrary.html" Link="Properties\License.openSourceC.StandardLibrary.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\openSourceC.StandardLibrary.Core\openSourceC.StandardLibrary.Core.csproj" />

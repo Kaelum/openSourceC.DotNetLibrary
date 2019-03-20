@@ -121,6 +121,9 @@
     <value>Provider name cannot be null or empty.</value>
     <comment>StringComment</comment>
   </data>
+  <data name="Injector_Already_Initialized" xml:space="preserve">
+    <value>This injector instance has already been initialized.</value>
+  </data>
   <data name="Provider_Already_Initialized" xml:space="preserve">
     <value>This provider instance has already been initialized.</value>
     <comment>StringComment</comment>

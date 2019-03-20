@@ -39,12 +39,12 @@ namespace openSourceC.StandardLibrary
 		/// </returns>
 		public static TInterface CreateInstance<TInterface>(
 			AppDomain appDomain,
-			DbProviderSettings settings,
+			DbProviderElement settings,
 			params object[] args
 		)
 			where TInterface : class
 		{
-			return AbstractProviderBase<DbProviderSettings>.CreateInstance<TInterface>(
+			return AbstractProviderBase<DbProviderElement>.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args
@@ -96,12 +96,12 @@ namespace openSourceC.StandardLibrary
 		/// </returns>
 		public static TInterface CreateInstance<TInterface>(
 			AppDomain appDomain,
-			DbProviderSettings settings,
+			DbProviderElement settings,
 			params object[] args
 		)
 			where TInterface : class
 		{
-			return AbstractProviderBase<DbProviderSettings>.CreateInstance<TInterface>(
+			return AbstractProviderBase<DbProviderElement>.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args

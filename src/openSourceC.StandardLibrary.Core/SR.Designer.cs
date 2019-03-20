@@ -70,6 +70,15 @@ namespace openSourceC.StandardLibrary {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This injector instance has already been initialized..
+        /// </summary>
+        internal static string Injector_Already_Initialized {
+            get {
+                return ResourceManager.GetString("Injector_Already_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This provider instance has already been initialized..
         /// </summary>
         internal static string Provider_Already_Initialized {

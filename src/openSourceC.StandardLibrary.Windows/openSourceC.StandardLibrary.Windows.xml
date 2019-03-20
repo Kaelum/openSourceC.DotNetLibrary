@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>openSourceC.StandardLibrary.Windows</name>
+    </assembly>
+    <members>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.CompareThreadByManagedThreadId">
+            <summary>
+            	Defines a method that implements a compare of two <see cref="T:Thread"/> objects by
+            	their <see cref="P:Thread.ManagedThreadId"/> properties.
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.CompareThreadByManagedThreadId.Compare(System.Threading.Thread,System.Threading.Thread)">
+            <summary>
+            	Compares two <see cref="T:Thread"/> objects and returns a value indicating whether
+            	one is less than, equal to, or greater than the other.
+            </summary>
+            <param name="x">The first <see cref="T:Thread"/> to compare.</param>
+            <param name="y">The second <see cref="T:Thread"/> to compare.</param>
+            <returns></returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.CompareThreadByManagedThreadId.Equals(System.Threading.Thread,System.Threading.Thread)">
+            <summary>
+            	Determines whether the specified <see cref="T:Thread"/> objects are equal.
+            </summary>
+            <param name="x">The first <see cref="T:Thread"/> to compare.</param>
+            <param name="y">The second <see cref="T:Thread"/> to compare.</param>
+            <returns>
+            	<b>true</b> if the specified <see cref="T:Thread"/> objects are equal; otherwise,
+            	<b>false</b>.
+            </returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.CompareThreadByManagedThreadId.GetHashCode(System.Threading.Thread)">
+            <summary>
+            	Returns a hash code for the specified <see cref="T:Thread"/>.
+            </summary>
+            <param name="obj">The <see cref="T:Thread"/> for which a hash code is to be returned.</param>
+            <returns>
+            	A hash code for the specified <see cref="T:Thread"/>.
+            </returns>
+        </member>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState">
+            <summary>
+            	Describes the current state of the processor.
+            </summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.ContinuePending">
+            <summary>The processor continue is pending.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.Created">
+            <summary>The processor has been initialized but has not yet been started.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.Paused">
+            <summary>The processor is paused.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.PausePending">
+            <summary>The processor pause is pending.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.Running">
+            <summary>The processor is running.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.StartPending">
+            <summary>The processor is starting.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.Stopped">
+            <summary>The processor is stopped.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorState.StopPending">
+            <summary>The processor is stopping.</summary>
+        </member>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.ServiceStateAction">
+            <summary>
+            	The service state actions.
+            </summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceStateAction.Pause">
+            <summary>Place the service into a paused state.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceStateAction.Run">
+            <summary>Place the service into a running state.</summary>
+        </member>
+        <member name="F:openSourceC.StandardLibrary.ServiceProcess.ServiceStateAction.Stop">
+            <summary>Place the service into a stopped state.</summary>
+        </member>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase">
+            <summary>
+            	Provides a base API for application access to Windows service events.
+            </summary>
+        </member>
+        <member name="E:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.Message">
+            <summary>
+            	Provides messages to subscribers.
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.Action">
+            <summary>Gets the current state action in effect.</summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.Status">
+            <summary>Gets the current state of the processor.</summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnContinue">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnContinue"/> command being sent to the service by the Service Control
+            	Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnCustomCommand(System.Int32)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnCustomCommand(System.Int32)"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnPause">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnPause"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnPowerEvent(System.ServiceProcess.PowerBroadcastStatus)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnPowerEvent(System.ServiceProcess.PowerBroadcastStatus)"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="powerStatus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnSessionChange(System.ServiceProcess.SessionChangeDescription)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStop"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="changeDescription"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnShutdown">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnShutdown"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnStart(System.String[])">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStart(System.String[])"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.IServiceApplicationBase.ExecuteOnStop">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStop"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase">
+            <summary>
+            	Summary description for ServiceApplicationBase.
+            </summary>
+            <remarks>
+            	DUE TO A BUG IN VISUAL STUDIO, THIS CLASS CAN'T BE MARKED ABSTRACT AS IT SHOULD BE IF
+            	YOU INTEND TO USE THE SERVICE DESIGNER.  ONCE THE BUG IS FIXED, THIS CLASS SHOULD BE
+            	MARKED ABSTRACT.
+            </remarks>
+        </member>
+        <member name="E:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.Message">
+            <summary>
+            	Provides messages to subscribers.
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.Log">
+            <summary>Gets the <see cref="T:OscLog"/> object.</summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.Action">
+            <summary>Gets or sets the current state action in effect.</summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.#ctor">
+            <summary>
+            	DO NOT USE THIS CONSTRUCTOR!
+            </summary>
+            <remarks>
+            	DUE TO A BUG IN VISUAL STUDIO, THIS CONSTRUCTOR IS REQUIRED IN ORDER FOR THE SERVICE
+            	DESIGNER TO WORK.  ONCE THE BUG IS FIXED, THIS CONSTRUCTOR SHOULD BE DELETED.
+            </remarks>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.#ctor(openSourceC.StandardLibrary.OscLog)">
+            <summary>
+            	Creates a ServiceApplicationBase object.
+            </summary>
+            <param name="log">The <see cref="T:OscLog"/> log to use.</param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.#ctor(System.String)">
+            <summary>
+            	Constructor
+            </summary>
+            <param name="loggerName">The name of the logger to use.</param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.Dispose(System.Boolean)">
+            <summary>
+            	Disposes of the resources (other than memory) used by the <see cref="T:ServiceBase"/>.
+            </summary>
+            <param name="disposing"><b>true</b> to release both managed and unmanaged resources;
+            	<b>false</b> to release only unmanaged resources.</param>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.SingleUseLockStatus">
+            <summary>
+            	Gets the current status of the single use lock.
+            </summary>
+            <returns>
+            	<b>true</b> if the current thread owns the lock; otherwise, <b>false</b>.
+            </returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.SingleUseLockWaitOne(System.Int32)">
+            <summary>
+            	Blocks the current thread until the current instance obtains the single use lock,
+            	using a 32-bit signed integer to specify the time interval.
+            </summary>
+            <returns>
+            	<b>true</b> if successful; otherwise, <b>false</b>.
+            </returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.SingleUseLockRelease">
+            <summary>
+            	Releases the single use lock.
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.ProcessorThreads">
+            <summary>
+            	Gets the list of processor threads.
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.ProcessorThreadsInitialized">
+            <summary>
+            	Gets a value indicating the initialization status of <see cref="P:ProcessorThreads"/>.
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.OnStop">
+            <summary>
+            	Executes when a Stop command is sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.Status">
+            <summary>Gets the current state of the processor.</summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnContinue">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnContinue"/> command being sent to the service by the Service Control
+            	Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnCustomCommand(System.Int32)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnCustomCommand(System.Int32)"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnPause">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnPause"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnPowerEvent(System.ServiceProcess.PowerBroadcastStatus)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnPowerEvent(System.ServiceProcess.PowerBroadcastStatus)"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="powerStatus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnSessionChange(System.ServiceProcess.SessionChangeDescription)">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStop"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="changeDescription"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnShutdown">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnShutdown"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnStart(System.String[])">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStart(System.String[])"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceApplicationBase.openSourceC#StandardLibrary#ServiceProcess#IServiceApplicationBase#ExecuteOnStop">
+            <summary>
+            	Emulates an <see cref="M:System.ServiceProcess.ServiceBase.OnStop"/> command being sent to the service by the Service Control Manager (SCM).
+            </summary>
+        </member>
+        <member name="T:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase">
+            <summary>
+            	Summary description of ServiceProcessorBase.
+            </summary>
+            <remarks>
+            	DUE TO A BUG IN VISUAL STUDIO, THIS CLASS CAN'T BE MARKED ABSTRACT AS IT SHOULD BE IF
+            	YOU INTEND TO USE THE SERVICE DESIGNER.  ONCE THE BUG IS FIXED, THIS CLASS SHOULD BE
+            	MARKED ABSTRACT.
+            </remarks>
+        </member>
+        <member name="E:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.Message">
+            <summary>
+            	Provides formatted messages to subscribers, like a ListView control in a WPF window.
+            </summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.Log">
+            <summary>Gets the <see cref="T:OscLog"/> object.</summary>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.State">
+            <summary>Gets the current state of the processor.</summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.#ctor">
+            <summary>
+            	!!! DO NOT USE !!!
+            </summary>
+            <remarks>
+            	DUE TO A BUG IN VISUAL STUDIO, THIS CONSTRUCTOR IS REQUIRED IN ORDER FOR THE SERVICE
+            	DESIGNER TO WORK.  ONCE THE BUG IS FIXED, THIS CONSTRUCTOR SHOULD BE DELETED.
+            </remarks>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.#ctor(openSourceC.StandardLibrary.OscLog)">
+            <summary>
+            	Creates an instance of ServiceProcessorBase using the specified
+            	<see cref="T:OscLog"/> object for messaging.
+            </summary>
+            <param name="log">The <see cref="T:OscLog"/> log to use.</param>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.#ctor(System.String)">
+            <summary>
+            	Creates an instance of ServiceProcessorBase using the specified logger for
+            	messaging.
+            </summary>
+            <param name="loggerName">The name of the logger to use.</param>
+        </member>
+        <member name="P:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.Disposed">
+            <summary>Gets a value indicating that this instance has been disposed.</summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.Dispose">
+            <summary>
+                Dispose and release all resources used by this instance.
+            </summary>
+        </member>
+        <member name="M:openSourceC.StandardLibrary.ServiceProcess.ServiceProcessorBase.Dispose(System.Boolean)">
+            <summary>
+            	Dispose(bool disposing) executes in two distinct scenarios.  If disposing equals
+            	<b>true</b>, <see cref="M:Dispose()"/> has been called directly or indirectly
+            	by a user's code.  Managed and unmanaged resources can be disposed.  If disposing
+            	equals <b>false</b>, <see cref="M:Dispose()"/> has been called by the runtime from
+            	inside the finalizer and you should not reference other objects.  Only unmanaged
+            	resources can be disposed.
+            </summary>
+            <param name="disposing"><b>true</b> when <see cref="M:Dispose()"/> has been called
+            	directly or indirectly by a user's code.  <b>false</b> when <see cref="M:Dispose()"/>
+            	has been called by the runtime from inside the finalizer and you should not
+            	reference other objects.</param>
+        </member>
+    </members>
+</doc>

@@ -5,20 +5,20 @@ using openSourceC.StandardLibrary.Configuration;
 namespace openSourceC.StandardLibrary
 {
 	/// <summary>
-	///		Summary description for DbAbstractProviderBase&lt;TSettingsElement&gt;.
+	///		Summary description for DbAbstractInjectorBase&lt;TSettingsElement&gt;.
 	/// </summary>
 	[Serializable]
-	public abstract class DbAbstractProviderBase : KeyedAbstractProviderBase<DbProviderSettings>
+	public abstract class DbAbstractInjectorBase : AbstractInjectorBase<DbInjectorSettings>
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbAbstractProviderBase"/>.
+		///		Creates an instance of <see cref="DbAbstractInjectorBase"/>.
 		/// </summary>
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
-		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
+		/// <param name="settings">The <see name="T:DbInjectorElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbAbstractProviderBase(OscLog log, DbProviderSettings settings, string nameSuffix)
+		protected DbAbstractInjectorBase(OscLog log, DbInjectorSettings settings, string nameSuffix)
 			: base(log, null, settings, nameSuffix) { }
 
 		#endregion
@@ -59,7 +59,7 @@ namespace openSourceC.StandardLibrary
 		#region Initialize
 
 		/// <summary>
-		///		Initializes the provider.
+		///		Initializes the injector.
 		/// </summary>
 		public override void Initialize()
 		{

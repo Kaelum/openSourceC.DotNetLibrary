@@ -18,7 +18,7 @@ namespace openSourceC.StandardLibrary
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractProvider(OscLog log, DbProviderElement settings, string nameSuffix)
+		protected DbAbstractProvider(OscLog log, DbProviderSettings settings, string nameSuffix)
 			: base(log, settings, nameSuffix) { }
 
 		#endregion
@@ -41,12 +41,12 @@ namespace openSourceC.StandardLibrary
 		/// </returns>
 		public new TInterface CreateInstance<TInterface>(
 			AppDomain appDomain,
-			DbProviderElement settings,
+			DbProviderSettings settings,
 			params object[] args
 		)
 			where TInterface : class
 		{
-			return AbstractProviderBase<DbProviderElement>.CreateInstance<TInterface>(
+			return DbAbstractProviderBase.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args
@@ -73,7 +73,7 @@ namespace openSourceC.StandardLibrary
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractProvider(OscLog log, TRequestContext requestContext, DbProviderElement settings, string nameSuffix)
+		protected DbAbstractProvider(OscLog log, TRequestContext requestContext, DbProviderSettings settings, string nameSuffix)
 			: base(log, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
@@ -106,12 +106,12 @@ namespace openSourceC.StandardLibrary
 		/// </returns>
 		public new TInterface CreateInstance<TInterface>(
 			AppDomain appDomain,
-			DbProviderElement settings,
+			DbProviderSettings settings,
 			params object[] args
 		)
 			where TInterface : class
 		{
-			return AbstractProviderBase<DbProviderElement>.CreateInstance<TInterface>(
+			return DbAbstractProviderBase.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args

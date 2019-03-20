@@ -5,21 +5,31 @@ using openSourceC.StandardLibrary.Configuration;
 namespace openSourceC.StandardLibrary
 {
 	/// <summary>
-	///		Summary description for DbAbstractProviderBase&lt;TSettingsElement&gt;.
+	///		Summary description for KeyedAbstractProviderBase&lt;TKeyedProviderSettings&gt;.
 	/// </summary>
+	/// <typeparam name="TKeyedProviderSettings">The keyed provider settings type.</typeparam>
 	[Serializable]
-	public abstract class DbAbstractProviderBase : KeyedAbstractProviderBase<DbProviderSettings>
+	public abstract class KeyedAbstractProviderBase<TKeyedProviderSettings> : AbstractProviderBase<TKeyedProviderSettings>
+		where TKeyedProviderSettings : KeyedProviderSettings, new()
 	{
+		[NonSerialized]
+		private string _key;
+
+
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbAbstractProviderBase"/>.
+		///		Creates an instance of <see cref="KeyedAbstractProviderBase&lt;TKeyedProviderSettings&gt;"/>.
 		/// </summary>
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
-		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
+		/// <param name="parentNames">The names of the parent configuration elements.</param>
+		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbAbstractProviderBase(OscLog log, DbProviderSettings settings, string nameSuffix)
-			: base(log, null, settings, nameSuffix) { }
+		protected KeyedAbstractProviderBase(OscLog log, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
+			: base(log, parentNames, settings, nameSuffix)
+		{
+			_key = settings.Key;
+		}
 
 		#endregion
 
@@ -70,11 +80,29 @@ namespace openSourceC.StandardLibrary
 
 		#region Protected Properties
 
-		/// <summary>Gets the application name.</summary>
-		protected string ApplicationName { get { return SettingsElement.ApplicationName; } }
+		/// <summary>Gets or sets the provider name excluding the suffix.</summary>
+		protected string ShortName { get { return _key.Substring(0, _key.Length - (base.NameSuffix == null ? 0 : base.NameSuffix.Length)); } }
 
-		/// <summary>Gets the connection name.</summary>
-		protected string ConnectionName { get { return SettingsElement.ConnectionKey; } }
+		#endregion
+
+		#region Public Properties
+
+		/// <summary>
+		///		Gets a brief, friendly description suitable for display in administrative tools or
+		///		other user interfaces (UIs).
+		///	</summary>
+		public override string Description
+		{
+			get { return (string.IsNullOrEmpty(base.Description) ? _key : base.Description); }
+		}
+
+		/// <summary>
+		///		Gets the friendly key name used to refer to the provider during configuration.
+		///	</summary>
+		public virtual string Key
+		{
+			get { return _key; }
+		}
 
 		#endregion
 	}

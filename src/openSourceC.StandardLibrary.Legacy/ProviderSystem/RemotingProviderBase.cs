@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace openSourceC.StandardLibrary
+namespace openSourceC.StandardLibrary.ProviderSystem
 {
 	/// <summary>
 	///		Provides a base implementation for the extensible provider model.

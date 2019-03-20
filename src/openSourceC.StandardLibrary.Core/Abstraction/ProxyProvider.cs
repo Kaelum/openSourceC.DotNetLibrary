@@ -27,29 +27,29 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates a provider instance that implements <typeparamref name="TInterface"/>.
 		/// </summary>
-		/// <typeparam name="TSettingsElement">The settings element type.</typeparam>
+		/// <typeparam name="TKeyedProviderSettings">The settings element type.</typeparam>
 		/// <typeparam name="TInterface">The interface type.</typeparam>
 		/// <param name="appDomain">The <see cref="T:AppDomain"/> instantiate the provider is, or
 		///		<b>null</b> to use the current <see cref="T:AppDomain"/>.</param>
-		/// <param name="settings">The <typeparamref name="TSettingsElement"/>
+		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/>
 		///		object.</param>
 		/// <param name="args">The arguments to pass to the constructor. This array of arguments
 		///		must match in number, order, and type the parameters of the constructor to invoke.
 		///		If the default constructor is preferred, <paramref name="args"/> must be an empty
 		///		array or null.</param>
 		/// <returns>
-		///		A <see cref="T:NamedAbstractProvider&lt;TSettingsElement&gt;"/>
+		///		A <see cref="T:KeyedAbstractProvider&lt;TKeyedProviderSettings&gt;"/>
 		///		instance that implements <typeparamref name="TInterface"/>.
 		/// </returns>
-		public static TInterface CreateInstance<TSettingsElement, TInterface>(
+		public static TInterface CreateInstance<TKeyedProviderSettings, TInterface>(
 			AppDomain appDomain,
-			TSettingsElement settings,
+			TKeyedProviderSettings settings,
 			params object[] args
 		)
-			where TSettingsElement : NamedProviderElement, new()
+			where TKeyedProviderSettings : KeyedProviderSettings, new()
 			where TInterface : class
 		{
-			return NamedAbstractProvider<TSettingsElement>.CreateInstance<TInterface>(
+			return KeyedAbstractProvider<TKeyedProviderSettings>.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args
@@ -89,29 +89,29 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates a provider instance that implements <typeparamref name="TInterface"/>.
 		/// </summary>
-		/// <typeparam name="TSettingsElement">The settings element type.</typeparam>
+		/// <typeparam name="TKeyedProviderSettings">The settings element type.</typeparam>
 		/// <typeparam name="TInterface">The interface type.</typeparam>
 		/// <param name="appDomain">The <see cref="T:AppDomain"/> instantiate the provider is, or
 		///		<b>null</b> to use the current <see cref="T:AppDomain"/>.</param>
-		/// <param name="settings">The <typeparamref name="TSettingsElement"/>
+		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/>
 		///		object.</param>
 		/// <param name="args">The arguments to pass to the constructor. This array of arguments
 		///		must match in number, order, and type the parameters of the constructor to invoke.
 		///		If the default constructor is preferred, <paramref name="args"/> must be an empty
 		///		array or null.</param>
 		/// <returns>
-		///		A <see cref="T:NamedAbstractProvider&lt;TSettingsElement&gt;"/>
+		///		A <see cref="T:KeyedAbstractProvider&lt;TKeyedProviderSettings&gt;"/>
 		///		instance that implements <typeparamref name="TInterface"/>.
 		/// </returns>
-		public static TInterface CreateInstance<TSettingsElement, TInterface>(
+		public static TInterface CreateInstance<TKeyedProviderSettings, TInterface>(
 			AppDomain appDomain,
-			TSettingsElement settings,
+			TKeyedProviderSettings settings,
 			params object[] args
 		)
-			where TSettingsElement : NamedProviderElement, new()
+			where TKeyedProviderSettings : KeyedProviderSettings, new()
 			where TInterface : class
 		{
-			return NamedAbstractProvider<TSettingsElement, TRequestContext>.CreateInstance<TInterface>(
+			return KeyedAbstractProvider<TKeyedProviderSettings, TRequestContext>.CreateInstance<TInterface>(
 				appDomain,
 				settings,
 				args

@@ -1,28 +1,26 @@
 ﻿using System;
 
-using openSourceC.StandardLibrary.Configuration;
-
 namespace openSourceC.StandardLibrary
 {
 	/// <summary>
-	///		Summary description for AbstractProvider&lt;TProviderSettings&gt;.
+	///		Summary description for AbstractProvider&lt;TSettingsElement&gt;.
 	/// </summary>
-	/// <typeparam name="TProviderSettings">The settings element type.</typeparam>
+	/// <typeparam name="TSettingsElement">The settings element type.</typeparam>
 	[Serializable]
-	public abstract class AbstractProvider<TProviderSettings> : AbstractProviderBase<TProviderSettings>
-		where TProviderSettings : ProviderSettings, new()
+	public abstract class AbstractProvider<TSettingsElement> : AbstractProviderBase<TSettingsElement>
+		where TSettingsElement : ProviderElement, new()
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="AbstractProvider&lt;TProviderSettings&gt;"/>.
+		///		Creates an instance of <see cref="AbstractProvider&lt;TSettingsElement&gt;"/>.
 		/// </summary>
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
-		/// <param name="settings">The <typeparamref name="TProviderSettings"/>
+		/// <param name="settings">The <typeparamref name="TSettingsElement"/>
 		///		object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected AbstractProvider(OscLog log, string[] parentNames, TProviderSettings settings, string nameSuffix)
+		protected AbstractProvider(OscLog log, string[] parentNames, TSettingsElement settings, string nameSuffix)
 			: base(log, parentNames, settings, nameSuffix) { }
 
 		#endregion
@@ -50,7 +48,7 @@ namespace openSourceC.StandardLibrary
 			TInterfaceSettingsElement settings,
 			params object[] args
 		)
-			where TInterfaceSettingsElement : ProviderSettings, new()
+			where TInterfaceSettingsElement : ProviderElement, new()
 			where TInterface : class
 		{
 			return AbstractProvider<TInterfaceSettingsElement>.CreateInstance<TInterface>(
@@ -64,26 +62,26 @@ namespace openSourceC.StandardLibrary
 	}
 
 	/// <summary>
-	///		Summary description for AbstractProvider&lt;TProviderSettings, TRequestContext&gt;.
+	///		Summary description for AbstractProvider&lt;TSettingsElement, TRequestContext&gt;.
 	/// </summary>
-	/// <typeparam name="TProviderSettings">The settings element type.</typeparam>
+	/// <typeparam name="TSettingsElement">The settings element type.</typeparam>
 	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
 	[Serializable]
-	public abstract class AbstractProvider<TProviderSettings, TRequestContext> : AbstractProviderBase<TProviderSettings>
-		where TProviderSettings : ProviderSettings, new()
+	public abstract class AbstractProvider<TSettingsElement, TRequestContext> : AbstractProviderBase<TSettingsElement>
+		where TSettingsElement : ProviderElement, new()
 		where TRequestContext : struct
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="AbstractProvider&lt;TProviderSettings, TRequestContext&gt;"/>.
+		///		Creates an instance of <see cref="AbstractProvider&lt;TSettingsElement, TRequestContext&gt;"/>.
 		/// </summary>
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
-		/// <param name="settings">The <typeparamref name="TProviderSettings"/> object.</param>
+		/// <param name="settings">The <typeparamref name="TSettingsElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected AbstractProvider(OscLog log, TRequestContext requestContext, string[] parentNames, TProviderSettings settings, string nameSuffix)
+		protected AbstractProvider(OscLog log, TRequestContext requestContext, string[] parentNames, TSettingsElement settings, string nameSuffix)
 			: base(log, parentNames, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
@@ -121,7 +119,7 @@ namespace openSourceC.StandardLibrary
 			TInterfaceSettingsElement settings,
 			params object[] args
 		)
-			where TInterfaceSettingsElement : ProviderSettings, new()
+			where TInterfaceSettingsElement : ProviderElement, new()
 			where TInterface : class
 		{
 			return AbstractProvider<TInterfaceSettingsElement, TRequestContext>.CreateInstance<TInterface>(

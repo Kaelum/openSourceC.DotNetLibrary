@@ -8,7 +8,7 @@ namespace openSourceC.StandardLibrary
 	///		Summary description for DbAbstractProviderBase&lt;TSettingsElement&gt;.
 	/// </summary>
 	[Serializable]
-	public abstract class DbAbstractProviderBase : KeyedAbstractProviderBase<DbProviderSettings>
+	public abstract class DbAbstractProviderBase : NamedAbstractProviderBase<DbProviderElement>
 	{
 		#region Constructors
 
@@ -18,7 +18,7 @@ namespace openSourceC.StandardLibrary
 		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbAbstractProviderBase(OscLog log, DbProviderSettings settings, string nameSuffix)
+		protected DbAbstractProviderBase(OscLog log, DbProviderElement settings, string nameSuffix)
 			: base(log, null, settings, nameSuffix) { }
 
 		#endregion
@@ -73,8 +73,8 @@ namespace openSourceC.StandardLibrary
 		/// <summary>Gets the application name.</summary>
 		protected string ApplicationName { get { return SettingsElement.ApplicationName; } }
 
-		/// <summary>Gets the connection name.</summary>
-		protected string ConnectionName { get { return SettingsElement.ConnectionKey; } }
+		/// <summary>Gets the connection string name.</summary>
+		protected string ConnectionStringName { get { return SettingsElement.ConnectionStringName; } }
 
 		#endregion
 	}

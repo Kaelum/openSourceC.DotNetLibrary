@@ -7,15 +7,36 @@
     <Company>WGB Enterprises</Company>
     <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
+    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>openSourceC.StandardLibrary.Data.SqlClient.xml</DocumentationFile>
     <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
   </PropertyGroup>
 
