@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -21,12 +23,12 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="KeyedAbstractProviderBase&lt;TKeyedProviderSettings&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected KeyedAbstractProviderBase(OscLog log, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
-			: base(log, parentNames, settings, nameSuffix)
+		protected KeyedAbstractProviderBase(ILogger logger, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
+			: base(logger, parentNames, settings, nameSuffix)
 		{
 			_key = settings.Key;
 		}

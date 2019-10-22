@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -15,11 +17,11 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="DbAbstractProviderBase"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbAbstractProviderBase(OscLog log, DbProviderSettings settings, string nameSuffix)
-			: base(log, null, settings, nameSuffix) { }
+		protected DbAbstractProviderBase(ILogger logger, DbProviderSettings settings, string nameSuffix)
+			: base(logger, null, settings, nameSuffix) { }
 
 		#endregion
 

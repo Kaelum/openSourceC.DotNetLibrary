@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -17,13 +19,13 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="AbstractProvider&lt;TProviderSettings&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TProviderSettings"/>
 		///		object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected AbstractProvider(OscLog log, string[] parentNames, TProviderSettings settings, string nameSuffix)
-			: base(log, parentNames, settings, nameSuffix) { }
+		protected AbstractProvider(ILogger logger, string[] parentNames, TProviderSettings settings, string nameSuffix)
+			: base(logger, parentNames, settings, nameSuffix) { }
 
 		#endregion
 
@@ -78,13 +80,13 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="AbstractProvider&lt;TProviderSettings, TRequestContext&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TProviderSettings"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected AbstractProvider(OscLog log, TRequestContext requestContext, string[] parentNames, TProviderSettings settings, string nameSuffix)
-			: base(log, parentNames, settings, nameSuffix)
+		protected AbstractProvider(ILogger logger, TRequestContext requestContext, string[] parentNames, TProviderSettings settings, string nameSuffix)
+			: base(logger, parentNames, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

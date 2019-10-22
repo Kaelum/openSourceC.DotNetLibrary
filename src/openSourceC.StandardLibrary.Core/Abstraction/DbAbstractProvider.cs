@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -15,11 +17,11 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="DbAbstractProvider"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractProvider(OscLog log, DbProviderSettings settings, string nameSuffix)
-			: base(log, settings, nameSuffix) { }
+		protected DbAbstractProvider(ILogger logger, DbProviderSettings settings, string nameSuffix)
+			: base(logger, settings, nameSuffix) { }
 
 		#endregion
 
@@ -69,12 +71,12 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="DbAbstractProvider&lt;TRequestContext&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="settings">The <see name="T:DbProviderElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractProvider(OscLog log, TRequestContext requestContext, DbProviderSettings settings, string nameSuffix)
-			: base(log, settings, nameSuffix)
+		protected DbAbstractProvider(ILogger logger, TRequestContext requestContext, DbProviderSettings settings, string nameSuffix)
+			: base(logger, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

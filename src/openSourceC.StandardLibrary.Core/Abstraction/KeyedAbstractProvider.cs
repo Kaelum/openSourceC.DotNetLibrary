@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -17,13 +19,13 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="KeyedAbstractProvider&lt;TSettingsElement&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/>
 		///		object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected KeyedAbstractProvider(OscLog log, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
-			: base(log, parentNames, settings, nameSuffix) { }
+		protected KeyedAbstractProvider(ILogger logger, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
+			: base(logger, parentNames, settings, nameSuffix) { }
 
 		#endregion
 
@@ -79,13 +81,13 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="KeyedAbstractProvider&lt;TSettingsElement, TRequestContext&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TKeyedProviderSettings"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected KeyedAbstractProvider(OscLog log, TRequestContext requestContext, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
-			: base(log, parentNames, settings, nameSuffix)
+		protected KeyedAbstractProvider(ILogger logger, TRequestContext requestContext, string[] parentNames, TKeyedProviderSettings settings, string nameSuffix)
+			: base(logger, parentNames, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

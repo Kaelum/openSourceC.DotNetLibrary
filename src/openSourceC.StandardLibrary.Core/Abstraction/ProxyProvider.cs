@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -14,11 +16,11 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Initializes a new instance of the <see cref="ProxyProvider"/> class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected ProxyProvider(OscLog log, string[] parentNames, string nameSuffix)
-			: base(log, parentNames, nameSuffix) { }
+		protected ProxyProvider(ILogger logger, string[] parentNames, string nameSuffix)
+			: base(logger, parentNames, nameSuffix) { }
 
 		#endregion
 
@@ -72,12 +74,12 @@ namespace openSourceC.StandardLibrary
 		///		Initializes a new instance of the <see cref="ProxyProvider&lt;TRequestContext&gt;"/>
 		///		class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected ProxyProvider(OscLog log, TRequestContext requestContext, string[] parentNames, string nameSuffix)
-			: base(log, parentNames, nameSuffix)
+		protected ProxyProvider(ILogger logger, TRequestContext requestContext, string[] parentNames, string nameSuffix)
+			: base(logger, parentNames, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

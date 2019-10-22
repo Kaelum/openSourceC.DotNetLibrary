@@ -1,5 +1,5 @@
-﻿#define _USES_UNMANGED_CODE
-#define _ENABLE_CONNECTION_TIMEOUT
+﻿//#define USES_UNMANGED_CODE
+//#define ENABLE_CONNECTION_TIMEOUT
 
 using System;
 using System.Collections.Generic;

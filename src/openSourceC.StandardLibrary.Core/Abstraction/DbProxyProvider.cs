@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -14,10 +16,10 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Initializes a new instance of the <see cref="DbProxyProvider"/> class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbProxyProvider(OscLog log, string nameSuffix)
-			: base(log, null, nameSuffix) { }
+		protected DbProxyProvider(ILogger logger, string nameSuffix)
+			: base(logger, null, nameSuffix) { }
 
 		#endregion
 
@@ -67,11 +69,11 @@ namespace openSourceC.StandardLibrary
 		///		Initializes a new instance of the <see cref="DbProxyProvider&lt;TRequestContext&gt;"/>
 		///		class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbProxyProvider(OscLog log, TRequestContext requestContext, string nameSuffix)
-			: base(log, null, nameSuffix)
+		protected DbProxyProvider(ILogger logger, TRequestContext requestContext, string nameSuffix)
+			: base(logger, null, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using openSourceC.StandardLibrary.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace openSourceC.StandardLibrary
 {
@@ -8,18 +8,19 @@ namespace openSourceC.StandardLibrary
 	///		Summary description for DbAbstractInjectorBase&lt;TSettingsElement&gt;.
 	/// </summary>
 	[Serializable]
-	public abstract class DbAbstractInjectorBase : AbstractInjectorBase<DbInjectorSettings>
+	public abstract class DbAbstractInjectorBase<TInjectorSettings> : AbstractInjectorBase<TInjectorSettings>
+		where TInjectorSettings : class
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbAbstractInjectorBase"/>.
+		///		Creates an instance of <see cref="DbAbstractInjectorBase&lt;TInjectorSettings&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="settings">The <see name="T:DbInjectorElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected DbAbstractInjectorBase(OscLog log, DbInjectorSettings settings, string nameSuffix)
-			: base(log, null, settings, nameSuffix) { }
+		protected DbAbstractInjectorBase(ILogger logger, TInjectorSettings settings, string nameSuffix)
+			: base(logger, null, settings, nameSuffix) { }
 
 		#endregion
 
@@ -65,16 +66,6 @@ namespace openSourceC.StandardLibrary
 		{
 			base.Initialize();
 		}
-
-		#endregion
-
-		#region Protected Properties
-
-		/// <summary>Gets the application name.</summary>
-		protected string ApplicationName { get { return SettingsElement.ApplicationName; } }
-
-		/// <summary>Gets the connection name.</summary>
-		protected string ConnectionName { get { return SettingsElement.ConnectionKey; } }
 
 		#endregion
 	}

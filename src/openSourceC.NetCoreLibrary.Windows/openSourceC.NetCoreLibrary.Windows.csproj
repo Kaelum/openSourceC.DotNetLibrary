@@ -8,7 +8,9 @@
     <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <AssemblyName>openSourceC.NetCoreLibrary.Windows</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\.resources\openSourceC.StandardLibrary.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,6 +42,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="..\.resources\License.openSourceC.StandardLibrary.html" Link="Properties\License.openSourceC.StandardLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.resources\openSourceC.StandardLibrary.snk" Link="Properties\openSourceC.StandardLibrary.snk" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,8 +8,8 @@ namespace openSourceC.StandardLibrary.Configuration
 	/// </summary>
 	public class ConnectionSettings : InjectorSettings
 	{
-		/// <summary>Gets or sets the connection string.</summary>
+		/// <summary>Gets or sets the connection string key for the parameter store.</summary>
 		[Required]
-		public string ConnectionString { get; set; }
+		public string ConnectionStringKey { get; set; }
 	}
 }

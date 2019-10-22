@@ -1,35 +1,39 @@
 ﻿using System;
 
-using openSourceC.StandardLibrary.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace openSourceC.StandardLibrary
 {
 	/// <summary>
 	///		Summary description for DbAbstractInjector.
 	/// </summary>
+	/// <typeparam name="TInjectorSettings"></typeparam>
 	[Serializable]
-	public abstract class DbAbstractInjector : DbAbstractInjectorBase
+	public abstract class DbAbstractInjector<TInjectorSettings> : DbAbstractInjectorBase<TInjectorSettings>
+		where TInjectorSettings : class
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbAbstractInjector"/>.
+		///		Creates an instance of <see cref="DbAbstractInjector&lt;TInjectorSettings&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="settings">The <see name="T:DbInjectorElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractInjector(OscLog log, DbInjectorSettings settings, string nameSuffix)
-			: base(log, settings, nameSuffix) { }
+		protected DbAbstractInjector(ILogger logger, TInjectorSettings settings, string nameSuffix)
+			: base(logger, settings, nameSuffix) { }
 
 		#endregion
 	}
 
 	/// <summary>
-	///		Summary description for DbAbstractInjector&lt;TRequestContext&gt;.
+	///		Summary description for DbAbstractInjector&lt;TInjectorSettings, TRequestContext&gt;.
 	/// </summary>
+	/// <typeparam name="TInjectorSettings"></typeparam>
 	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
 	[Serializable]
-	public abstract class DbAbstractInjector<TRequestContext> : DbAbstractInjectorBase
+	public abstract class DbAbstractInjector<TInjectorSettings, TRequestContext> : DbAbstractInjectorBase<TInjectorSettings>
+		where TInjectorSettings : class
 		where TRequestContext : struct
 	{
 		#region Constructors
@@ -37,12 +41,12 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="DbAbstractInjector&lt;TRequestContext&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="settings">The <see name="T:DbInjectorElement"/> object.</param>
 		/// <param name="nameSuffix">The name suffix to use, or null is not used.</param>
-		protected DbAbstractInjector(OscLog log, TRequestContext requestContext, DbInjectorSettings settings, string nameSuffix)
-			: base(log, settings, nameSuffix)
+		protected DbAbstractInjector(ILogger logger, TRequestContext requestContext, TInjectorSettings settings, string nameSuffix)
+			: base(logger, settings, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}

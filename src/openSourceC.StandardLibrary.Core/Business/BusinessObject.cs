@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 using openSourceC.StandardLibrary.Configuration;
 
 namespace openSourceC.StandardLibrary
@@ -14,10 +16,10 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Initializes a new instance of the <see cref="BusinessObject"/> class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected BusinessObject(OscLog log, string nameSuffix)
-			: base(log, nameSuffix) { }
+		protected BusinessObject(ILogger logger, string nameSuffix)
+			: base(logger, nameSuffix) { }
 
 		#endregion
 
@@ -67,11 +69,11 @@ namespace openSourceC.StandardLibrary
 		///		Initializes a new instance of the <see cref="BusinessObject&lt;TRequestContext&gt;"/>
 		///		class.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected BusinessObject(OscLog log, TRequestContext requestContext, string nameSuffix)
-			: base(log, nameSuffix)
+		protected BusinessObject(ILogger logger, TRequestContext requestContext, string nameSuffix)
+			: base(logger, nameSuffix)
 		{
 			RequestContext = requestContext;
 		}
@@ -129,11 +131,11 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of BusinessObjectBase.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected BusinessObjectBase(OscLog log, string nameSuffix)
+		protected BusinessObjectBase(ILogger logger, string nameSuffix)
 		{
-			Log = log ?? throw new ArgumentNullException("log");
+			Logger = logger ?? throw new ArgumentNullException("log");
 			NameSuffix = nameSuffix;
 		}
 
@@ -196,8 +198,8 @@ namespace openSourceC.StandardLibrary
 
 		#region Protected Properties
 
-		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
-		protected OscLog Log { get; private set; }
+		/// <summary>Gets the <see cref="T:ILogger"/> object.</summary>
+		protected ILogger Logger { get; private set; }
 
 		/// <summary>Gets the name suffix.</summary>
 		protected string NameSuffix { get; private set; }

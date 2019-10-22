@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 
-using openSourceC.StandardLibrary.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace openSourceC.StandardLibrary
 {
@@ -11,12 +10,12 @@ namespace openSourceC.StandardLibrary
 	/// <typeparam name="TInjectorSettings">The injector settings type.</typeparam>
 	[Serializable]
 	public abstract class AbstractInjectorBase<TInjectorSettings> : AbstractInjectorBase
-		where TInjectorSettings : InjectorSettings, new()
+		where TInjectorSettings : class
 	{
 		[NonSerialized]
 		private string _appDomainName;
 		[NonSerialized]
-		private readonly OscLog _log;
+		private readonly ILogger _logger;
 		[NonSerialized]
 		private string[] _parentNames;
 		[NonSerialized]
@@ -30,14 +29,14 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Creates an instance of <see cref="AbstractInjectorBase&lt;TInjectorSettings&gt;"/>.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="settings">The <typeparamref name="TInjectorSettings"/> object.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected AbstractInjectorBase(OscLog log, string[] parentNames, TInjectorSettings settings, string nameSuffix)
+		protected AbstractInjectorBase(ILogger logger, string[] parentNames, TInjectorSettings settings, string nameSuffix)
 			: base("TODO: description" /*settings.Parameters["description"]*/)
 		{
-			_log = log ?? throw new ArgumentNullException(nameof(log));
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_parentNames = parentNames;
 			_settings = settings ?? throw new ArgumentNullException(nameof(settings));
 			_nameSuffix = nameSuffix;
@@ -110,8 +109,8 @@ namespace openSourceC.StandardLibrary
 			private set { _appDomainName = value; }
 		}
 
-		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
-		protected OscLog Log { get { return _log; } }
+		/// <summary>Gets the <see cref="T:ILogger"/> object.</summary>
+		protected ILogger Logger { get { return _logger; } }
 
 		/// <summary>Gets the name suffix.</summary>
 		protected string NameSuffix { get { return _nameSuffix; } }
@@ -120,7 +119,7 @@ namespace openSourceC.StandardLibrary
 		protected string[] ParentNames { get { return _parentNames; } }
 
 		/// <summary>Gets the <typeparamref name="TInjectorSettings"/> object.</summary>
-		protected TInjectorSettings SettingsElement { get { return _settings; } }
+		protected TInjectorSettings Settings { get { return _settings; } }
 
 		#endregion
 
@@ -238,6 +237,8 @@ namespace openSourceC.StandardLibrary
 			// Check to see if Dispose has already been called.
 			if (!Disposed)
 			{
+				Disposed = true;
+
 				// If disposing equals true, dispose of managed resources.
 				if (disposing)
 				{
@@ -245,8 +246,6 @@ namespace openSourceC.StandardLibrary
 				}
 
 				// Dispose of unmanaged resources.
-
-				Disposed = true;
 			}
 		}
 

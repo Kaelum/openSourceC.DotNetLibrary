@@ -2,12 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x64;x86</Platforms>
     <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Company>WGB Enterprises</Company>
     <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>..\.resources\openSourceC.StandardLibrary.snk</AssemblyOriginatorKeyFile>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,6 +46,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="..\.resources\License.openSourceC.StandardLibrary.html" Link="Properties\License.openSourceC.StandardLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.resources\openSourceC.StandardLibrary.snk" Link="Properties\openSourceC.StandardLibrary.snk" />
   </ItemGroup>
 
   <ItemGroup>

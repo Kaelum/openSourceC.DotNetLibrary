@@ -2,12 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x64;x86</Platforms>
     <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Company>WGB Enterprises</Company>
     <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>..\.resources\openSourceC.StandardLibrary.snk</AssemblyOriginatorKeyFile>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,7 +42,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Configuration\DataFactorySection.cs" />
+    <Compile Remove="Configuration\DbFactorySectionBase.cs" />
+    <Compile Remove="Data\DbFactory.cs" />
+    <Compile Remove="Data\DbFactoryBase.cs" />
+    <Compile Remove="Data\DbFactoryCommand.cs" />
+    <Compile Remove="Data\Exceptions\DbCommandException.cs" />
+    <Compile Remove="Data\Exceptions\ReaderDelegateException.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="..\.resources\License.openSourceC.StandardLibrary.html" Link="Properties\License.openSourceC.StandardLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.resources\openSourceC.StandardLibrary.snk" Link="Properties\openSourceC.StandardLibrary.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Configuration\DataFactorySection.cs" />
+    <None Include="Configuration\DbFactorySectionBase.cs" />
+    <None Include="Data\DbFactory.cs" />
+    <None Include="Data\DbFactoryBase.cs" />
+    <None Include="Data\DbFactoryCommand.cs" />
+    <None Include="Data\Exceptions\DbCommandException.cs" />
+    <None Include="Data\Exceptions\ReaderDelegateException.cs" />
   </ItemGroup>
 
   <ItemGroup>

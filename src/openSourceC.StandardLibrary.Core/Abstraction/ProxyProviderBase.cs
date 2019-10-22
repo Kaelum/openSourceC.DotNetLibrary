@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Extensions.Logging;
+
 namespace openSourceC.StandardLibrary
 {
 	/// <summary>
@@ -8,7 +10,7 @@ namespace openSourceC.StandardLibrary
 	public abstract class ProxyProviderBase : MarshalByRefObject, IDisposable
 	{
 		[NonSerialized]
-		private readonly OscLog _log;
+		private readonly ILogger _logger;
 		[NonSerialized]
 		private readonly string[] _parentNames;
 		[NonSerialized]
@@ -23,12 +25,12 @@ namespace openSourceC.StandardLibrary
 		/// <summary>
 		///		Constructor.
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLog"/> object.</param>
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
 		/// <param name="parentNames">The names of the parent configuration elements.</param>
 		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected ProxyProviderBase(OscLog log, string[] parentNames, string nameSuffix)
+		protected ProxyProviderBase(ILogger logger, string[] parentNames, string nameSuffix)
 		{
-			_log = log ?? throw new ArgumentNullException("log");
+			_logger = logger ?? throw new ArgumentNullException("log");
 			_parentNames = parentNames;
 			_nameSuffix = nameSuffix;
 		}
@@ -80,6 +82,8 @@ namespace openSourceC.StandardLibrary
 			// Check to see if Dispose has already been called.
 			if (!Disposed)
 			{
+				Disposed = true;
+
 				// If disposing equals true, dispose of managed resources.
 				if (disposing)
 				{
@@ -89,8 +93,6 @@ namespace openSourceC.StandardLibrary
 #if USES_UNMANGED_CODE
 				// Dispose of unmanaged resources.
 #endif
-
-				Disposed = true;
 			}
 		}
 
@@ -131,8 +133,8 @@ namespace openSourceC.StandardLibrary
 
 		#region Protected Properties
 
-		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
-		protected OscLog Log { get { return _log; } }
+		/// <summary>Gets the <see cref="T:ILogger"/> object.</summary>
+		protected ILogger Logger { get { return _logger; } }
 
 		/// <summary>Gets the name suffix.</summary>
 		protected string NameSuffix { get { return _nameSuffix; } }

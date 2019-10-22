@@ -262,3 +262,4 @@ __pycache__/
 *.pyc
 
 /src/openSourceC.NetCoreLibrary.Windows/openSourceC.NetCoreLibrary.Windows.xml
+/src/openSourceC.StandardLibrary.Core/openSourceC.StandardLibrary.Core.xml
