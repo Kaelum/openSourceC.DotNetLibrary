@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace openSourceC.StandardLibrary.ServiceProcess
+namespace openSourceC.StandardLibrary.Threading
 {
 	/// <summary>
 	///		Defines a method that implements a compare of two <see cref="T:Thread"/> objects by

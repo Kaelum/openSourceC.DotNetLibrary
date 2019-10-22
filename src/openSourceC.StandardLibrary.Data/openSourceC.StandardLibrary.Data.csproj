@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Company>WGB Enterprises</Company>

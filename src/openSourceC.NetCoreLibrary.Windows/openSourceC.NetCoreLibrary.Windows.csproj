@@ -1,17 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>openSourceC.StandardLibrary</RootNamespace>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>openSourceC.NetCoreLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Company>WGB Enterprises</Company>
     <Copyright>Copyright © 2018 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <AssemblyName>openSourceC.NetCoreLibrary.Windows</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
@@ -26,7 +27,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.StandardLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -42,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

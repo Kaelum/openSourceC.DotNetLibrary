@@ -261,3 +261,4 @@ paket-files/
 __pycache__/
 *.pyc
 
+/src/openSourceC.NetCoreLibrary.Windows/openSourceC.NetCoreLibrary.Windows.xml

@@ -4,6 +4,8 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 
+using openSourceC.StandardLibrary.Threading;
+
 namespace openSourceC.StandardLibrary.ServiceProcess
 {
 	/// <summary>

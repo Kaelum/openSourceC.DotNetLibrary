@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{3A58054A-FC4C-462D-A0C8-1A38B5197275}"
 	ProjectSection(SolutionItems) = preProject
@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openSourceC.StandardLibrary
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openSourceC.StandardLibrary.Data.SqlClient", "openSourceC.StandardLibrary.Data.SqlClient\openSourceC.StandardLibrary.Data.SqlClient.csproj", "{D6ED15E7-4953-4329-B078-5D99531E052A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openSourceC.StandardLibrary.Windows", "openSourceC.StandardLibrary.Windows\openSourceC.StandardLibrary.Windows.csproj", "{2F7D5C04-AC63-4C17-97FF-6B62E41BAD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openSourceC.NetCoreLibrary.Windows", "openSourceC.NetCoreLibrary.Windows\openSourceC.NetCoreLibrary.Windows.csproj", "{2F7D5C04-AC63-4C17-97FF-6B62E41BAD5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.StandardLibrary.Legacy", "openSourceC.StandardLibrary.Legacy\openSourceC.StandardLibrary.Legacy.csproj", "{A99E55A0-18EA-4C12-90B3-63834E5CCC9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openSourceC.StandardLibrary.Legacy", "openSourceC.StandardLibrary.Legacy\openSourceC.StandardLibrary.Legacy.csproj", "{A99E55A0-18EA-4C12-90B3-63834E5CCC9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
