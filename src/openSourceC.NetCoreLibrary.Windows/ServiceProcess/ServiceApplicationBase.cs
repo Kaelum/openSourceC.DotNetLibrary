@@ -4,9 +4,9 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 
-using openSourceC.StandardLibrary.Threading;
+using openSourceC.NetCoreLibrary.Threading;
 
-namespace openSourceC.StandardLibrary.ServiceProcess
+namespace openSourceC.NetCoreLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Summary description for ServiceApplicationBase.
@@ -21,7 +21,7 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		/// <summary>
 		///		Provides messages to subscribers.
 		/// </summary>
-		public event MessageEventHandler Message;
+		public event MessageEventHandler? Message;
 
 		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
 		protected OscLog Log { get; private set; }
@@ -29,10 +29,10 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		/// <summary>Gets or sets the current state action in effect.</summary>
 		public ServiceStateAction Action { get; protected set; } = ServiceStateAction.Stop;
 
-		private Semaphore _singleUse;
+		private Semaphore? _singleUse;
 		private readonly object _singleUseLock = new object();
 
-		private SortedList<Thread, ServiceProcessorBase> _processorThreads;
+		private SortedList<Thread, ServiceProcessorBase>? _processorThreads;
 		private readonly object _processorThreadsLock = new object();
 
 
@@ -46,7 +46,7 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		///		DESIGNER TO WORK.  ONCE THE BUG IS FIXED, THIS CONSTRUCTOR SHOULD BE DELETED.
 		///	</remarks>
 		[Obsolete("Use of this constructor is not supported.", true)]
-		public ServiceApplicationBase() { }
+		public ServiceApplicationBase() : this(OscLog.Instance) { }
 
 		/// <summary>
 		///		Creates a ServiceApplicationBase object.
@@ -97,7 +97,7 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 				{
 					lock (_processorThreadsLock)
 					{
-						while (_processorThreads?.Count != 0)
+						while (_processorThreads.Count != 0)
 						{
 							foreach (KeyValuePair<Thread, ServiceProcessorBase> processorThread in _processorThreads.ToArray())
 							{
@@ -120,7 +120,6 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 				Log.Message -= OscLog_Message;
 
 				Message = null;
-				Log = null;
 			}
 
 			// Dispose of unmanaged resources.
@@ -231,9 +230,9 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		/// </summary>
 		protected override void OnStop()
 		{
-			for (bool firstPass = true; _processorThreads?.Count != 0; firstPass = false)
+			for (bool firstPass = true; _processorThreads != null && _processorThreads.Count != 0; firstPass = false)
 			{
-				// Itterate through an array copy to allow the removal of objects from the list.
+				// Iterate through an array copy to allow the removal of objects from the list.
 				foreach (KeyValuePair<Thread, ServiceProcessorBase> processorThread in _processorThreads.ToArray())
 				{
 					if (firstPass && processorThread.Key.IsAlive)

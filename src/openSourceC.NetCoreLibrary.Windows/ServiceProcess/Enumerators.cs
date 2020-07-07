@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace openSourceC.StandardLibrary.ServiceProcess
+namespace openSourceC.NetCoreLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Describes the current state of the processor.

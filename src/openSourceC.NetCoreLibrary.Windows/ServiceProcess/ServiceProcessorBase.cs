@@ -2,7 +2,7 @@
 
 using System;
 
-namespace openSourceC.StandardLibrary.ServiceProcess
+namespace openSourceC.NetCoreLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Summary description of ServiceProcessorBase.
@@ -17,7 +17,7 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		/// <summary>
 		///		Provides formatted messages to subscribers, like a ListView control in a WPF window.
 		/// </summary>
-		public event MessageEventHandler Message;
+		public event MessageEventHandler? Message;
 
 		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
 		protected OscLog Log { get; private set; }
@@ -35,7 +35,8 @@ namespace openSourceC.StandardLibrary.ServiceProcess
 		///		DUE TO A BUG IN VISUAL STUDIO, THIS CONSTRUCTOR IS REQUIRED IN ORDER FOR THE SERVICE
 		///		DESIGNER TO WORK.  ONCE THE BUG IS FIXED, THIS CONSTRUCTOR SHOULD BE DELETED.
 		///	</remarks>
-		public ServiceProcessorBase() { }
+		[Obsolete("Use of this constructor is not allowed.", true)]
+		public ServiceProcessorBase() : this(OscLog.Instance) { }
 
 		/// <summary>
 		///		Creates an instance of ServiceProcessorBase using the specified

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 
-namespace openSourceC.StandardLibrary.ServiceProcess
+namespace openSourceC.NetCoreLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Provides a base API for application access to Windows service events.

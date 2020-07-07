@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,7 +9,7 @@
     <Nullable>enable</Nullable>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Company>WGB Enterprises</Company>
-    <Copyright>Copyright © 2020 WGB Enterprises</Copyright>
+    <Copyright>Copyright � 2020 WGB Enterprises</Copyright>
     <Authors>William Bosacker</Authors>
     <AssemblyOriginatorKeyFile>..\.resources\openSourceC.NetCoreLibrary.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
@@ -17,46 +17,38 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\.resources\License.openSourceC.NetCoreLibrary.html" Link="Properties\License.openSourceC.NetCoreLibrary.html" />
+    <ProjectReference Include="..\openSourceC.NetCoreLibrary.Core\openSourceC.NetCoreLibrary.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.resources\openSourceC.NetCoreLibrary.snk" Link="Properties\openSourceC.NetCoreLibrary.snk" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\openSourceC.NetCoreLibrary.Core\openSourceC.NetCoreLibrary.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -17,30 +17,30 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>openSourceC.NetCoreLibrary.Windows.xml</DocumentationFile>
+    <DocumentationFile>openSourceC.NetCoreLibrary.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -52,11 +52,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\openSourceC.NetCoreLibrary.Core\openSourceC.NetCoreLibrary.Core.csproj" />
+    <Compile Update="SR.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SR.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="SR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>openSourceC.NetCoreLibrary</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
