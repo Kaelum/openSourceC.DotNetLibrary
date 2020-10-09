@@ -9,6 +9,16 @@ namespace openSourceC.NetCoreLibrary.Extensions
 	public static class DateTimeOffsetExtensions
 	{
 		/// <summary>
+		///		Converts a UNIX time (long) to a <see cref="T:DateTimeOffset"/>.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static DateTimeOffset ToDateTimeOffset(this long value)
+		{
+			return DateTimeOffset.UnixEpoch.AddMilliseconds(value);
+		}
+
+		/// <summary>
 		///		Gets a friendly date string in relation to todays date.
 		/// </summary>
 		/// <param name="obj">The <see cref="T:DateTimeOffset"/> object.</param>

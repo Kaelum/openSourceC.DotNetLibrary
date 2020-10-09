@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace openSourceC.NetCoreLibrary.Extensions
 {
@@ -7,6 +9,22 @@ namespace openSourceC.NetCoreLibrary.Extensions
 	/// </summary>
 	public static class StringExtensions
 	{
+		/// <summary>
+		///		Encodes all characters in the specified string into a UTF8 encoded sequence of bytes.
+		/// </summary>
+		/// <param name="obj">The string.</param>
+		/// <returns></returns>
+		[return: NotNullIfNotNull("obj")]
+		public static byte[]? GetUTF8Bytes(this string? obj)
+		{
+			if (obj == null)
+			{
+				return null;
+			}
+
+			return Encoding.UTF8.GetBytes(obj);
+		}
+
 		/// <summary>
 		///		Returns the left part of a character string with the specified number of characters.
 		/// </summary>

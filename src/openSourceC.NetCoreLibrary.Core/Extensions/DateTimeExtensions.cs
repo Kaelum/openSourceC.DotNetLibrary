@@ -9,6 +9,16 @@ namespace openSourceC.NetCoreLibrary.Extensions
 	public static class DateTimeExtensions
 	{
 		/// <summary>
+		///		Converts a UNIX time (long) to a <see cref="T:DateTime"/>.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static DateTime ToDateTime(this long value)
+		{
+			return DateTime.UnixEpoch.AddMilliseconds(value);
+		}
+
+		/// <summary>
 		///		Gets a friendly date string in relation to todays date.
 		/// </summary>
 		/// <param name="obj">The <see cref="T:DateTime"/> object.</param>

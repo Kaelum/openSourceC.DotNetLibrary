@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace openSourceC.NetCoreLibrary
@@ -15,6 +16,7 @@ namespace openSourceC.NetCoreLibrary
 		/// </summary>
 		/// <param name="byteArray"></param>
 		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
 		public static string? ByteArrayToString(byte[]? byteArray)
 		{
 			if (byteArray == null)
@@ -25,7 +27,6 @@ namespace openSourceC.NetCoreLibrary
 			return ByteArrayToString(byteArray, 0, byteArray.Length);
 		}
 
-
 		/// <summary>
 		///		Converts a byte array to a hexadecimal string.
 		/// </summary>
@@ -33,6 +34,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
 		public static string? ByteArrayToString(byte[]? byteArray, int offset, int length)
 		{
 			if (byteArray == null)
@@ -66,6 +68,7 @@ namespace openSourceC.NetCoreLibrary
 		/// </summary>
 		/// <param name="byteArray"></param>
 		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
 		public static string? HexEncode(this byte[] byteArray)
 		{
 			return ByteArrayToString(byteArray, 0, byteArray.Length);
@@ -78,6 +81,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
 		public static string? HexEncode(this byte[] byteArray, int offset, int length)
 		{
 			return ByteArrayToString(byteArray, offset, length);
@@ -92,7 +96,8 @@ namespace openSourceC.NetCoreLibrary
 		/// </summary>
 		/// <param name="hexString"></param>
 		/// <returns></returns>
-		public static byte[]? HexDecode(this string hexString)
+		[return: NotNullIfNotNull("hexString")]
+		public static byte[]? HexDecode(this string? hexString)
 		{
 			return StringToByteArray(hexString);
 		}
@@ -102,6 +107,7 @@ namespace openSourceC.NetCoreLibrary
 		/// </summary>
 		/// <param name="hexString"></param>
 		/// <returns></returns>
+		[return: NotNullIfNotNull("hexString")]
 		public static byte[]? StringToByteArray(string? hexString)
 		{
 			if (hexString == null)
@@ -122,6 +128,108 @@ namespace openSourceC.NetCoreLibrary
 			}
 
 			return returnValue;
+		}
+
+		#endregion
+
+		#region ToHexDump
+
+		/// <summary>
+		///		Converts a byte array to a hexadecimal string.
+		/// </summary>
+		/// <param name="byteArray"></param>
+		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
+		public static string? DumpByteArray(byte[]? byteArray)
+		{
+			const int lineBlockSize = 8;
+			const int bytesPerLine = 16;
+			const int linesPerPage = 16;
+			const int pageSize = linesPerPage * bytesPerLine;
+
+			if (byteArray == null)
+			{
+				return null;
+			}
+
+			StringBuilder returnValue = new StringBuilder();
+
+			for (int page = 0; page * pageSize < byteArray.Length; page++)
+			{
+				if (page != 0)
+				{
+					returnValue.AppendLine();
+				}
+
+				for (int line = 0; line < linesPerPage && page * pageSize + line * bytesPerLine < byteArray.Length; line++)
+				{
+					returnValue.Append($"{(page * linesPerPage + line) * bytesPerLine:X4} :");
+
+					for (int index = 0; index < bytesPerLine; index++)
+					{
+						if (index % lineBlockSize == 0)
+						{
+							returnValue.Append("  ");
+						}
+
+						int byteIndex = (page * linesPerPage + line) * bytesPerLine + index;
+
+						if (byteIndex < byteArray.Length)
+						{
+							returnValue.Append($"  {byteArray[byteIndex]:X2}");
+						}
+						else
+						{
+							returnValue.Append("    ");
+						}
+					}
+
+					returnValue.Append("    ");
+
+					for (int index = 0; index < bytesPerLine; index++)
+					{
+						int byteIndex = (page * linesPerPage + line) * bytesPerLine + index;
+
+						if (byteIndex < byteArray.Length)
+						{
+							byte arrayByte = byteArray[byteIndex];
+
+							if (arrayByte < 0x20 || arrayByte > 0x7F)
+							{
+								returnValue.Append(".");
+							}
+							else
+							{
+								returnValue.Append(Convert.ToChar(arrayByte));
+							}
+						}
+						else
+						{
+							returnValue.Append(" ");
+						}
+					}
+
+					returnValue.AppendLine();
+				}
+			}
+
+			return returnValue.ToString();
+		}
+
+		/// <summary>
+		///		Converts a byte array to a hexadecimal string.
+		/// </summary>
+		/// <param name="byteArray"></param>
+		/// <returns></returns>
+		[return: NotNullIfNotNull("byteArray")]
+		public static string? ToHexDump(this byte[]? byteArray)
+		{
+			if (byteArray == null)
+			{
+				return null;
+			}
+
+			return DumpByteArray(byteArray);
 		}
 
 		#endregion

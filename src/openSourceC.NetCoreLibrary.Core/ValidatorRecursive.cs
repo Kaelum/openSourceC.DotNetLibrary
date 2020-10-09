@@ -73,7 +73,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 					: $"{parentName}.{property.Name}"
 				);
 
-				if (propertyValue! is IEnumerable enumerableValue)
+				if (propertyValue is IEnumerable enumerableValue)
 				{
 					//KeyValuePair<string, int> test;
 					foreach (object? enumeration in enumerableValue)

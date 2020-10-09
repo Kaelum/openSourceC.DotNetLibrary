@@ -31,7 +31,7 @@ namespace openSourceC.NetCoreLibrary.Threading
 
 			Thread thread = new Thread(start)
 			{
-				Name = name,
+				Name = (name != null ? name : start.Method.Name),
 			};
 
 			thread.Start();

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -137,6 +138,68 @@ namespace openSourceC.NetCoreLibrary.Extensions
 			return (
 				enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(RelatedTypeAttribute), true).SingleOrDefault() is RelatedTypeAttribute attribute
 				? attribute.Type
+				: null
+			);
+		}
+
+		#endregion
+
+		#region XmlAttributeAttribute
+
+		/// <summary>
+		///		Gets the attribute name of the <see cref="T:XmlAttributeAttribute"/> for the
+		///		specified object.
+		/// </summary>
+		/// <param name="obj">The object being extended.</param>
+		/// <param name="propertyName">The name of the property.</param>
+		/// <returns>
+		///		The attribute name of the <see cref="T:XmlAttributeAttribute"/> for the specified
+		///		object, or <b>null</b> if the attribute does not exist.
+		/// </returns>
+		public static string? GetXmlAttributeName(this object obj, string propertyName)
+		{
+			BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public);
+			PropertyInfo? propertyInfo = obj.GetType().GetProperty(propertyName, bindingFlags);
+
+			if (propertyInfo == null)
+			{
+				return null;
+			}
+
+			return (
+				propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), true).SingleOrDefault() is XmlAttributeAttribute attribute
+				? attribute.AttributeName
+				: null
+			);
+		}
+
+		#endregion
+
+		#region XmlElementAttribute
+
+		/// <summary>
+		///		Gets the element name of the <see cref="T:XmlElementAttribute"/> for the specified
+		///		object.
+		/// </summary>
+		/// <param name="obj">The object being extended.</param>
+		/// <param name="propertyName">The name of the property.</param>
+		/// <returns>
+		///		The element name of the <see cref="T:XmlElementAttribute"/> for the specified
+		///		object, or <b>null</b> if the attribute does not exist.
+		/// </returns>
+		public static string? GetXmlElementName(this object obj, string propertyName)
+		{
+			BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public);
+			PropertyInfo? propertyInfo = obj.GetType().GetProperty(propertyName, bindingFlags);
+
+			if (propertyInfo == null)
+			{
+				return null;
+			}
+
+			return (
+				propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), true).SingleOrDefault() is XmlElementAttribute attribute
+				? attribute.ElementName
 				: null
 			);
 		}

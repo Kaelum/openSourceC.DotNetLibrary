@@ -11,8 +11,9 @@ namespace openSourceC.NetCoreLibrary.ComponentModel
 	/// </summary>
 	public class RectangleLTRBConverter : TypeConverter
 	{
-		private const string _matchPattern = @"^\[?<left>\d{1,},?<top>\d{1,}-?<right>\d{1,},?<bottom>\d{1,}\]$";
-		private static readonly Regex _matchRegex = new Regex(_matchPattern, RegexOptions.Compiled | RegexOptions.Singleline);
+		private const string MATCH_PATTERN = @"^\[?<left>\d{1,},?<top>\d{1,}-?<right>\d{1,},?<bottom>\d{1,}\]$";
+
+		private static readonly Regex _matchRegex = new Regex(MATCH_PATTERN, RegexOptions.Compiled | RegexOptions.Singleline);
 
 
 		/// <summary>

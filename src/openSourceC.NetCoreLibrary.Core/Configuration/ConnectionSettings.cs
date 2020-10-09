@@ -8,8 +8,8 @@ namespace openSourceC.NetCoreLibrary.Configuration
 	/// </summary>
 	public class ConnectionSettings : InjectorSettings
 	{
-		/// <summary>Gets or sets the connection string key for the parameter store.</summary>
+		/// <summary>Gets or sets the connection string.</summary>
 		[Required]
-		public string? ConnectionStringKey { get; set; }
+		public string? ConnectionString { get; set; }
 	}
 }

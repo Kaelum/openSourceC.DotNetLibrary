@@ -8,7 +8,7 @@ namespace openSourceC.NetCoreLibrary.Threading
 	public interface IService
 	{
 		/// <summary>Gets a value indicating that the processor is fully operational.</summary>
-		bool InitializationComplete { get; }
+		bool IsFullyOperational { get; }
 
 
 		/// <summary>
