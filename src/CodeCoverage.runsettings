@@ -37,8 +37,8 @@ Included items must then not match any entries in the exclude list to remain inc
 							</Include>
 							<Exclude>
 								<ModulePath>.*CPPUnitTestFramework.*</ModulePath>
-								<ModulePath>.*\Authentication.dll</ModulePath>
-								<ModulePath>.*\openSourceC.NetCoreLibrary.Core.dll</ModulePath>
+								<ModulePath>.*\\Authentication.dll</ModulePath>
+								<ModulePath>.*\\openSourceC.NetCoreLibrary.Core.dll</ModulePath>
 							</Exclude>
 						</ModulePaths>
 

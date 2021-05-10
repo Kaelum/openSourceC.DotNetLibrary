@@ -19,20 +19,27 @@ namespace openSourceC.NetCoreLibrary.Threading
 		/// <returns></returns>
 		public int Compare(Thread? x, Thread? y)
 		{
-			if (x == null && y == null)
+			if (x is null && y is null)
 			{
 				return 0;
 			}
-			else if (x == null)
+			else if (x is null)
 			{
 				return int.MinValue;
 			}
-			else if (y == null)
+			else if (y is null)
 			{
 				return int.MaxValue;
 			}
 
-			return x.ManagedThreadId.CompareTo(y.ManagedThreadId);
+			int result = x.ManagedThreadId.CompareTo(y.ManagedThreadId);
+
+			if (result != 0)
+			{
+				return result;
+			}
+
+			return x.GetHashCode().CompareTo(y.GetHashCode());
 		}
 
 		/// <summary>
@@ -47,8 +54,12 @@ namespace openSourceC.NetCoreLibrary.Threading
 		public bool Equals(Thread? x, Thread? y)
 		{
 			return (
-				(x == null && y == null)
-				|| (x != null && y != null && x.ManagedThreadId == y.ManagedThreadId)
+				(x is null && y is null)
+				|| (
+					!(x is null || y is null)
+					&& x.ManagedThreadId.Equals(y.ManagedThreadId)
+					&& x.GetHashCode().Equals(y.GetHashCode())
+				)
 			);
 		}
 
