@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -8,7 +9,7 @@ namespace openSourceC.NetCoreLibrary.Threading
 	/// <summary>
 	///		Summary description for ServiceThreadSet.
 	/// </summary>
-	public class ServiceThreadSet
+	public class ServiceThreadSet : IDisposable
 	{
 		private const int SLEEP_10_MILLISECONDS = 10;
 		private const int SLEEP_100_MILLISECONDS = 100;
@@ -24,6 +25,70 @@ namespace openSourceC.NetCoreLibrary.Threading
 		public ServiceThreadSet()
 		{
 			_serviceThreads = new Dictionary<Guid, ServiceThread>();
+		}
+
+		#endregion
+
+		#region IDisposable Implementation
+
+		/// <summary>
+		///		This destructor will run only if the Dispose method does not get called.
+		/// </summary>
+		/// <remarks>Do not provide destructors in types derived from this class.</remarks>
+		~ServiceThreadSet()
+		{
+			Dispose(false);
+		}
+
+		/// <summary>Gets a value indicating that this instance has been disposed.</summary>
+		protected bool Disposed { get; private set; }
+
+		/// <summary>
+		///		Dispose of this object.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		///		Dispose(bool disposing) executes in two distinct scenarios.  If disposing equals
+		///		<b>true</b>, <see cref="M:Dispose()"/> has been called directly or indirectly
+		///		by a user's code.  Managed and unmanaged resources can be disposed.  If disposing
+		///		equals <b>false</b>, <see cref="M:Dispose()"/> has been called by the runtime from
+		///		inside the finalizer and you should not reference other objects.  Only unmanaged
+		///		resources can be disposed.
+		/// </summary>
+		/// <param name="disposing"><b>true</b> when <see cref="M:Dispose()"/> has been called
+		///		directly or indirectly by a user's code.  <b>false</b> when <see cref="M:Dispose()"/>
+		///		has been called by the runtime from inside the finalizer and you should not
+		///		reference other objects.</param>
+		protected virtual void Dispose(bool disposing)
+		{
+			// Check to see if Dispose has already been called.
+			if (!Disposed)
+			{
+				Disposed = true;
+
+				// If disposing equals true, dispose of managed resources.
+				if (disposing)
+				{
+					Thread currentThread = Thread.CurrentThread;
+
+					Debug.WriteLine($"{nameof(ServiceThreadSet)}-DISPOSE-START ({currentThread.ManagedThreadId.ToString()})");
+
+					while (!Join(10) && _serviceThreads.Count != 0)
+					{
+						Thread.Sleep(10);
+					}
+
+					Debug.WriteLine($"{nameof(ServiceThreadSet)}-DISPOSE-END ({currentThread.ManagedThreadId.ToString()})");
+				}
+
+				// Dispose of unmanaged resources.
+			}
 		}
 
 		#endregion
@@ -80,11 +145,6 @@ namespace openSourceC.NetCoreLibrary.Threading
 			{
 				serviceThread.Thread.Join();
 
-				if (serviceThread is IDisposable disposable)
-				{
-					disposable.Dispose();
-				}
-
 				_serviceThreads.Remove(serviceThread.InstanceId);
 			}
 		}
@@ -109,11 +169,6 @@ namespace openSourceC.NetCoreLibrary.Threading
 			{
 				if (serviceThread.Thread.Join(millisecondsTimeout))
 				{
-					if (serviceThread is IDisposable disposable)
-					{
-						disposable.Dispose();
-					}
-
 					_serviceThreads.Remove(serviceThread.InstanceId);
 				}
 				else
@@ -145,11 +200,6 @@ namespace openSourceC.NetCoreLibrary.Threading
 			{
 				if (serviceThread.Thread.Join(timeout))
 				{
-					if (serviceThread is IDisposable disposable)
-					{
-						disposable.Dispose();
-					}
-
 					_serviceThreads.Remove(serviceThread.InstanceId);
 				}
 				else
@@ -162,8 +212,7 @@ namespace openSourceC.NetCoreLibrary.Threading
 		}
 
 		/// <summary>
-		///		Remove and dispose (if the object is <see cref="T:IDIsposable"/>) the specified
-		///		service thread instance.
+		///		Remove the specified service thread instance from the service thread set.
 		/// </summary>
 		/// <param name="instanceId">The unique service thread instance identifier to remove.</param>
 		/// <returns>
@@ -177,11 +226,6 @@ namespace openSourceC.NetCoreLibrary.Threading
 			if (_serviceThreads.TryGetValue(instanceId, out ServiceThread? serviceThread))
 			{
 				removed = _serviceThreads.Remove(instanceId);
-
-				if (serviceThread is IDisposable disposable)
-				{
-					disposable.Dispose();
-				}
 			}
 
 			return removed;
