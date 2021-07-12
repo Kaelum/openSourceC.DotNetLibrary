@@ -5,142 +5,6 @@ using Microsoft.Extensions.Logging;
 namespace openSourceC.NetCoreLibrary
 {
 	/// <summary>
-	///		Summary description for AbstractInjectorBase&lt;TInjectorSettings&gt;.
-	/// </summary>
-	/// <typeparam name="TInjectorSettings">The injector settings type.</typeparam>
-	[Serializable]
-	public abstract class AbstractInjectorBase<TInjectorSettings> : AbstractInjectorBase
-		where TInjectorSettings : class
-	{
-		[NonSerialized]
-		private readonly ILogger _logger;
-		[NonSerialized]
-		private string[]? _parentNames;
-		[NonSerialized]
-		private readonly TInjectorSettings _settings;
-		[NonSerialized]
-		private readonly string? _nameSuffix;
-
-
-		#region Constructors
-
-		/// <summary>
-		///		Creates an instance of <see cref="AbstractInjectorBase&lt;TInjectorSettings&gt;"/>.
-		/// </summary>
-		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
-		/// <param name="parentNames">The names of the parent configuration elements.</param>
-		/// <param name="settings">The <typeparamref name="TInjectorSettings"/> object.</param>
-		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
-		protected AbstractInjectorBase(ILogger logger, string[]? parentNames, TInjectorSettings settings, string? nameSuffix)
-			: base("TODO: description" /*settings.Parameters["description"]*/)
-		{
-			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			_parentNames = parentNames;
-			_settings = settings ?? throw new ArgumentNullException(nameof(settings));
-			_nameSuffix = nameSuffix;
-		}
-
-		#endregion
-
-		#region IDisposable Implementation
-
-		/// <summary>
-		///		Dispose(bool disposing) executes in two distinct scenarios.  If disposing equals
-		///		<b>true</b>, <see cref="M:Dispose()"/> has been called directly or indirectly
-		///		by a user's code.  Managed and unmanaged resources can be disposed.  If disposing
-		///		equals <b>false</b>, <see cref="M:Dispose()"/> has been called by the runtime from
-		///		inside the finalizer and you should not reference other objects.  Only unmanaged
-		///		resources can be disposed.
-		/// </summary>
-		/// <param name="disposing"><b>true</b> when <see cref="M:Dispose()"/> has been called
-		///		directly or indirectly by a user's code.  <b>false</b> when <see cref="M:Dispose()"/>
-		///		has been called by the runtime from inside the finalizer and you should not
-		///		reference other objects.</param>
-		protected override void Dispose(bool disposing)
-		{
-			// Check to see if Dispose has already been called.
-			if (!Disposed)
-			{
-				// If disposing equals true, dispose of managed resources.
-				if (disposing)
-				{
-					// Dispose of managed resources.
-				}
-
-				// Dispose of unmanaged resources.
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
-		#region Initialize
-
-		/// <summary>
-		///		Initializes the injector.
-		/// </summary>
-		public override void Initialize()
-		{
-			base.Initialize();
-
-#if DIAGNOSTICS
-			if (SettingsElement.ElementInformation != null && SettingsElement.ElementInformation.Properties != null)
-			{
-				foreach (PropertyInformation pi in SettingsElement.ElementInformation.Properties)
-				{
-					try { Debug.WriteLine($"\tProperty: {pi.Name} = {pi.Value}"); }
-					catch { }
-				}
-			}
-#endif
-		}
-
-		#endregion
-
-		#region Protected Properties
-
-		/// <summary>Gets the <see cref="T:ILogger"/> object.</summary>
-		protected ILogger Logger { get { return _logger; } }
-
-		/// <summary>Gets the name suffix.</summary>
-		protected string? NameSuffix { get { return _nameSuffix; } }
-
-		/// <summary>Gets the names of the parent configuration elements.</summary>
-		protected string[]? ParentNames { get { return _parentNames; } }
-
-		/// <summary>Gets the <typeparamref name="TInjectorSettings"/> object.</summary>
-		protected TInjectorSettings Settings { get { return _settings; } }
-
-		#endregion
-
-		#region Protected Methods
-
-		/// <summary>
-		///		Extends the <see cref="P:ParentNames"/> property with the specified names.
-		/// </summary>
-		/// <param name="args">The names to appended to <see cref="P:ParentNames"/>.</param>
-		/// <returns>
-		///		The extended list of parent element names.
-		/// </returns>
-		protected string[] ExtendParentNames(params string[] args)
-		{
-			string[] newParentNames = new string[(_parentNames?.Length ?? 0) + args.Length];
-
-			_parentNames?.CopyTo(newParentNames, 0);
-
-			if (args.Length != 0)
-			{
-				args.CopyTo(newParentNames, (_parentNames?.Length ?? 0));
-			}
-
-			return newParentNames;
-		}
-
-		#endregion
-	}
-
-	/// <summary>
 	///		Provides a base implementation for the extensible injector model.
 	/// </summary>
 	/// <remarks>
@@ -168,24 +32,48 @@ namespace openSourceC.NetCoreLibrary
 	///		<para>This model can, and should, be applied to any kind of feature functionality that
 	///		could be abstracted and implemented in multiple ways.</para>
 	/// </remarks>
+	/// <typeparam name="TInjectorSettings">The injector settings type.</typeparam>
 	[Serializable]
-	public abstract class AbstractInjectorBase : IDisposable
+	public abstract class AbstractInjectorBase<TInjectorSettings> : IDisposable
+		where TInjectorSettings : class
 	{
+		[NonSerialized]
+		private readonly ILogger _logger;
+		[NonSerialized]
+		private string[]? _parentNames;
+		[NonSerialized]
+		private readonly TInjectorSettings _settings;
+		[NonSerialized]
+		private readonly string? _nameSuffix;
+
+		[NonSerialized]
 		private bool _initialized;
+		[NonSerialized]
 		private readonly string? _description;
+
+		[NonSerialized]
+		private readonly AbstractInjectorBase<TInjectorSettings> _thisLock;
 
 
 		#region Constructors
 
 		/// <summary>
-		///		Creates a new instance of the <see cref="T:AbstractInjectorBase"/> class.
+		///		Creates an instance of <see cref="AbstractInjectorBase&lt;TInjectorSettings&gt;"/>.
 		/// </summary>
-		/// <param name="description">The description of the injector.</param>
-		protected AbstractInjectorBase(string? description)
+		/// <param name="logger">The <see cref="T:ILogger"/> object.</param>
+		/// <param name="parentNames">The names of the parent configuration elements.</param>
+		/// <param name="settings">The <typeparamref name="TInjectorSettings"/> object.</param>
+		/// <param name="nameSuffix">The name suffix used, or <b>null</b> if not used.</param>
+		protected AbstractInjectorBase(ILogger logger, string[]? parentNames, TInjectorSettings settings, string? nameSuffix)
 		{
-			_description = description;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			_parentNames = parentNames;
+			_settings = settings ?? throw new ArgumentNullException(nameof(settings));
+			_nameSuffix = nameSuffix;
 
-			Disposed = false;
+			_description = "TODO: description";// settings.Parameters["description"]
+
+			_thisLock = this;
 		}
 
 		#endregion
@@ -202,7 +90,7 @@ namespace openSourceC.NetCoreLibrary
 		}
 
 		/// <summary>Gets a value indicating that this instance has been disposed.</summary>
-		protected bool Disposed { get; private set; }
+		protected bool Disposed { get; private set; } = false;
 
 		/// <summary>
 		///		Dispose of this object.
@@ -251,29 +139,100 @@ namespace openSourceC.NetCoreLibrary
 		///		Initializes the injector.
 		/// </summary>
 		/// <remarks>
-		///		The base class implementation internally tracks the number of times the injector's
-		///		<b>Initialize</b> method has been called. If a injector is initialized more than
-		///		once, an <b>InvalidOperationException</b> is thrown stating that the injector is
-		///		already initialized.
+		///		The base class implementation internally tracks whether the injector's
+		///		<see cref="M:Initialize()"/> method has been called and only returns <b>true</b> to
+		///		that caller that actually initializes the object.  This method potentially blocks
+		///		all use of the object while initializing the object.
 		///		<para>Because most feature injectors call <b>Initialize</b> prior to performing
 		///		injector-specific initialization, this method is a central location for preventing
 		///		double initialization.</para>
 		/// </remarks>
-		///	<exception cref="InvalidOperationException">An attempt is made to call <b>Initialize</b>
-		///		on a injector after the injector has already been initialized.</exception>
-		public virtual void Initialize()
+		///	<returns>
+		///		<b>true</b> if the object is initialized, or <b>false</b> if it is already
+		///		initialized.
+		///	</returns>
+		public bool Initialize()
 		{
-			AbstractInjectorBase baseLock = this;
-
-			lock (baseLock)
+			if (!_initialized)
 			{
-				if (_initialized)
+				lock (_thisLock)
 				{
-					throw new InvalidOperationException(SR.GetString("Injector_Already_Initialized"));
-				}
+					if (_initialized)
+					{
+						return false;
+					}
 
-				_initialized = true;
+					_initialized = true;
+
+					Initialization();
+				}
 			}
+
+			return false;
+		}
+
+		/// <summary>
+		///		The virtual method called to initialize the object.
+		/// </summary>
+		protected virtual void Initialization()
+		{
+#if DIAGNOSTICS
+			// This code needs to either be updated, or removed.
+			if (SettingsElement.ElementInformation is not null && SettingsElement.ElementInformation.Properties is not null)
+			{
+				foreach (PropertyInformation pi in SettingsElement.ElementInformation.Properties)
+				{
+					try { Debug.WriteLine($"\tProperty: {pi.Name} = {pi.Value}"); }
+					catch { }
+				}
+			}
+#endif
+		}
+
+		#endregion
+
+		#region Protected Properties
+
+		/// <summary>Gets the <see cref="T:ILogger"/> object.</summary>
+		protected ILogger Logger => _logger;
+
+		/// <summary>Gets the name suffix.</summary>
+		protected string? NameSuffix => _nameSuffix;
+
+		/// <summary>Gets the names of the parent configuration elements.</summary>
+		protected string[]? ParentNames => _parentNames;
+
+		/// <summary>Gets the <typeparamref name="TInjectorSettings"/> object.</summary>
+		protected TInjectorSettings Settings => _settings;
+
+		#endregion
+
+		#region Protected Methods
+
+		/// <summary>
+		///		Extends the <see cref="P:ParentNames"/> property with the specified names.
+		/// </summary>
+		/// <param name="args">The names to appended to <see cref="P:ParentNames"/>.</param>
+		/// <returns>
+		///		The extended list of parent element names.
+		/// </returns>
+		protected string[] ExtendParentNames(params string[] args)
+		{
+			if (args is null)
+			{
+				throw new ArgumentNullException(nameof(args));
+			}
+
+			string[] newParentNames = new string[(_parentNames?.Length ?? 0) + args.Length];
+
+			_parentNames?.CopyTo(newParentNames, 0);
+
+			if (args.Length != 0)
+			{
+				args.CopyTo(newParentNames, (_parentNames?.Length ?? 0));
+			}
+
+			return _parentNames = newParentNames;
 		}
 
 		#endregion
@@ -284,10 +243,12 @@ namespace openSourceC.NetCoreLibrary
 		///		Gets a brief, friendly description suitable for display in administrative tools or
 		///		other user interfaces (UIs).
 		///	</summary>
-		public virtual string? Description
-		{
-			get { return _description; }
-		}
+		public virtual string? Description => _description;
+
+		/// <summary>
+		///		Gets a value indicating that the object has been initialized.
+		/// </summary>
+		public bool Initialized => _initialized;
 
 		#endregion
 	}

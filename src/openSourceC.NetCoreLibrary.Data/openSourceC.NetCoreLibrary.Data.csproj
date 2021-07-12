@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <RootNamespace>openSourceC.NetCoreLibrary</RootNamespace>
@@ -91,7 +91,7 @@
     <EmbeddedResource Update="Data\SR.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SR.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>openSourceC.NetCoreLibrary</CustomToolNamespace>
+      <CustomToolNamespace>openSourceC.NetCoreLibrary.Data</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
 

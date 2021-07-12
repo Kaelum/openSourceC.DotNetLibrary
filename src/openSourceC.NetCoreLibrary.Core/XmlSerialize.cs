@@ -62,7 +62,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject DecryptFromBase64String<TObject, TSymmetricAlgorithm>(string base64XmlString, byte[] key, byte[] iv)
+		public static TObject? DecryptFromBase64String<TObject, TSymmetricAlgorithm>(string base64XmlString, byte[] key, byte[] iv)
 			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
 		{
 #if DEBUG
@@ -80,7 +80,7 @@ namespace openSourceC.NetCoreLibrary
 					stream.Seek(0, SeekOrigin.Begin);
 
 					XmlSerializer serializer = new XmlSerializer(typeof(TObject));
-					return (TObject)serializer.Deserialize(stream);
+					return (TObject?)serializer.Deserialize(stream);
 				}
 #if DEBUG
 			}
@@ -102,7 +102,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject DecryptFromBase64String<TObject>(string base64XmlString, byte[] key, byte[] iv)
+		public static TObject? DecryptFromBase64String<TObject>(string base64XmlString, byte[] key, byte[] iv)
 		{
 			// RijndaelManaged
 			// DESCryptoServiceProvider
@@ -124,9 +124,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(Stream stream)
+		public static TObject? Deserialize<TObject>(Stream stream)
 		{
-			return (TObject)Deserialize(typeof(TObject), stream);
+			return (TObject?)Deserialize(typeof(TObject), stream);
 		}
 
 		/// <summary>
@@ -137,9 +137,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(string xmlString)
+		public static TObject? Deserialize<TObject>(string xmlString)
 		{
-			return (TObject)Deserialize(typeof(TObject), xmlString);
+			return (TObject?)Deserialize(typeof(TObject), xmlString);
 		}
 
 		/// <summary>
@@ -151,9 +151,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(TextReader textReader)
+		public static TObject? Deserialize<TObject>(TextReader textReader)
 		{
-			return (TObject)Deserialize(typeof(TObject), textReader);
+			return (TObject?)Deserialize(typeof(TObject), textReader);
 		}
 
 		/// <summary>
@@ -164,9 +164,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(XElement node)
+		public static TObject? Deserialize<TObject>(XElement node)
 		{
-			return (TObject)Deserialize(typeof(TObject), node);
+			return (TObject?)Deserialize(typeof(TObject), node);
 		}
 
 		/// <summary>
@@ -177,9 +177,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(XmlElement element)
+		public static TObject? Deserialize<TObject>(XmlElement element)
 		{
-			return (TObject)Deserialize(typeof(TObject), element);
+			return (TObject?)Deserialize(typeof(TObject), element);
 		}
 
 		/// <summary>
@@ -191,9 +191,9 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
-		public static TObject Deserialize<TObject>(XmlReader xmlReader)
+		public static TObject? Deserialize<TObject>(XmlReader xmlReader)
 		{
-			return (TObject)Deserialize(typeof(TObject), xmlReader);
+			return (TObject?)Deserialize(typeof(TObject), xmlReader);
 		}
 
 		/// <summary>
@@ -205,7 +205,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, Stream stream)
+		public static object? Deserialize(Type type, Stream stream)
 		{
 			if (type == null)
 			{
@@ -244,7 +244,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, string xmlString)
+		public static object? Deserialize(Type type, string xmlString)
 		{
 			if (type == null)
 			{
@@ -271,7 +271,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, TextReader textReader)
+		public static object? Deserialize(Type type, TextReader textReader)
 		{
 			if (type == null)
 			{
@@ -306,7 +306,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, XElement node)
+		public static object? Deserialize(Type type, XElement node)
 		{
 			if (type == null)
 			{
@@ -332,7 +332,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, XmlElement element)
+		public static object? Deserialize(Type type, XmlElement element)
 		{
 			if (type == null)
 			{
@@ -373,7 +373,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An object of the specified type.
 		/// </returns>
-		public static object Deserialize(Type type, XmlReader xmlReader)
+		public static object? Deserialize(Type type, XmlReader xmlReader)
 		{
 			if (type == null)
 			{
@@ -795,7 +795,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An <see cref="T:XmlElement"/> representation of the object.
 		/// </returns>
-		public static XmlElement SerializeToXmlElement<TObject>(TObject obj, bool supportXsiNamespace = false, bool expandForReadability = false)
+		public static XmlElement? SerializeToXmlElement<TObject>(TObject obj, bool supportXsiNamespace = false, bool expandForReadability = false)
 			where TObject : notnull
 		{
 			return SerializeToXmlElement(typeof(TObject), obj, supportXsiNamespace, expandForReadability);
@@ -813,7 +813,7 @@ namespace openSourceC.NetCoreLibrary
 		/// <returns>
 		///		An <see cref="T:XmlElement"/> representation of the object.
 		/// </returns>
-		public static XmlElement SerializeToXmlElement(Type type, object obj, bool supportXsiNamespace = false, bool expandForReadability = false)
+		public static XmlElement? SerializeToXmlElement(Type type, object obj, bool supportXsiNamespace = false, bool expandForReadability = false)
 		{
 #if DEBUG
 			try

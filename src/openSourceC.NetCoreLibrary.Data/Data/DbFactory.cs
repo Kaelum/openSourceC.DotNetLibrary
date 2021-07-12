@@ -106,14 +106,14 @@ namespace openSourceC.NetCoreLibrary.Data
 				// Check to see if managed resources need to be disposed of.
 				if (disposing)
 				{
-					if (_transaction != null)
+					if (_transaction is not null)
 					{
 						_transaction.Rollback();
 						_transaction.Dispose();
 						_transaction = null;
 					}
 
-					if (_cn != null)
+					if (_cn is not null)
 					{
 						_cn.Dispose();
 						_cn = null;
@@ -140,7 +140,7 @@ namespace openSourceC.NetCoreLibrary.Data
 		/// <summary>
 		///		Gets a value indicating that an ambient transaction exists.
 		/// </summary>
-		public bool AmbientTransactionExists { get { return System.Transactions.Transaction.Current != null; } }
+		public bool AmbientTransactionExists { get { return System.Transactions.Transaction.Current is not null; } }
 
 		/// <summary>
 		///		Gets the connection object of this instance.
@@ -251,7 +251,7 @@ namespace openSourceC.NetCoreLibrary.Data
 		/// <summary>
 		///		Gets a value indicating that a transaction exists.
 		/// </summary>
-		public bool TransactionExists { get { return _transaction != null; } }
+		public bool TransactionExists { get { return _transaction is not null; } }
 
 		#endregion
 
@@ -309,9 +309,9 @@ namespace openSourceC.NetCoreLibrary.Data
 		public void ChangeConnection(string connectionStringName, int connectionTimeout)
 		{
 #endif
-			if (_cn != null)
+			if (_cn is not null)
 			{
-				while (_transaction != null)
+				while (_transaction is not null)
 				{
 					PopTransaction();
 				}
@@ -407,7 +407,7 @@ namespace openSourceC.NetCoreLibrary.Data
 		/// </summary>
 		protected virtual void PopTransaction()
 		{
-			if (_transaction != null)
+			if (_transaction is not null)
 			{
 				_transaction.Dispose();
 				_transaction = null;
@@ -424,7 +424,7 @@ namespace openSourceC.NetCoreLibrary.Data
 		/// </summary>
 		protected virtual void PushTransaction()
 		{
-			if (_transaction != null)
+			if (_transaction is not null)
 			{
 				TransactionStack.Push(_transaction);
 				_transaction = null;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,18 +12,33 @@ namespace openSourceC.NetCoreLibrary.Threading
 	/// </summary>
 	public class ThreadSet : IDisposable
 	{
-		private readonly SortedSet<Thread> _threads;
+		private readonly CancellationTokenSource _cancellationTokenSource;
+		private readonly List<ThreadSetItem> _threads;
 		private readonly CountdownEvent _servicesCountdownEvent;
 
 
 		#region Constructors
 
 		/// <summary>
-		///		Create and instance of ThreadSet.
+		///		Create an instance of ThreadSet.
 		/// </summary>
 		public ThreadSet()
 		{
-			_threads = new SortedSet<Thread>(new CompareThreadByManagedThreadId());
+			_cancellationTokenSource = new();
+			_threads = new List<ThreadSetItem>();
+
+			// Prime the countdown with 1 event, which will be signaled in the Start() method.
+			_servicesCountdownEvent = new CountdownEvent(1);
+		}
+
+		/// <summary>
+		///		Create an instance of ThreadSet.
+		/// </summary>
+		/// <param name="cancellationTokenSource"></param>
+		public ThreadSet(CancellationTokenSource cancellationTokenSource)
+		{
+			_cancellationTokenSource = cancellationTokenSource;
+			_threads = new List<ThreadSetItem>();
 
 			// Prime the countdown with 1 event, which will be signaled in the Start() method.
 			_servicesCountdownEvent = new CountdownEvent(1);
@@ -80,19 +96,14 @@ namespace openSourceC.NetCoreLibrary.Threading
 
 					Debug.WriteLine($"{nameof(ThreadSet)}-DISPOSE-START ({currentThread.ManagedThreadId.ToString()})");
 
+					if ((_threads.Count != 0))
+					{
+						Cancel();
+					}
+
 					while (_threads.Count != 0)
 					{
-						Thread[] threads = _threads.ToArray();
-
-						for (int i = 0; i < threads.Length; i++)
-						{
-							Thread thread = threads[i];
-
-							if (thread.Join(10) || !thread.IsAlive)
-							{
-								_threads.Remove(thread);
-							}
-						}
+						Join(10);
 					}
 
 					// Dispose of managed resources.
@@ -110,10 +121,10 @@ namespace openSourceC.NetCoreLibrary.Threading
 		#region Public Properties
 
 		/// <summary>Gets a value indicating whether all threads are alive.</summary>
-		public bool AllAlive => _threads.All(t => t.IsAlive);
+		public bool AllAlive => _threads.All(t => t.Thread.IsAlive);
 
 		/// <summary>Gets a value indicating whether any thread is alive.</summary>
-		public bool AnyAlive => _threads.Any(t => t.IsAlive);
+		public bool AnyAlive => _threads.Any(t => t.Thread.IsAlive);
 
 		/// <summary>Gets the number of threads.</summary>
 		public int Count => _threads.Count;
@@ -121,6 +132,14 @@ namespace openSourceC.NetCoreLibrary.Threading
 		#endregion
 
 		#region Public Methods
+
+		/// <summary>
+		///		Communicates a request to cancel all threads.
+		/// </summary>
+		public void Cancel()
+		{
+			_cancellationTokenSource.Cancel();
+		}
 
 		/// <summary>
 		///		Create a new <see cref="T:Thread"/> using the specified <see cref="T:ThreadStart"/>
@@ -149,12 +168,59 @@ namespace openSourceC.NetCoreLibrary.Threading
 				throw new ArgumentNullException(nameof(start));
 			}
 
-			Thread thread = new Thread(start)
+			lock (((ICollection)_threads).SyncRoot)
 			{
-				Name = (name != null ? name : start.Method.Name),
-			};
+				ThreadSetItem threadSetItem = new(
+					new Thread(start)
+					{
+						Name = (name is not null ? name : start.Method.Name),
+					}
+				);
 
-			_threads.Add(thread);
+				_threads.Add(threadSetItem);
+			}
+		}
+
+		/// <summary>
+		///		Create a new <see cref="T:Thread"/> using the specified <see cref="T:ThreadStart"/>
+		///		and add it to the set.
+		/// </summary>
+		/// <remarks>
+		///		Each thread should signal the <see cref="T:CountdownEvent"/> once, and only once, to
+		///		indicate that the thread has successfully started.  The <see cref="M:Wait()"/>
+		///		methods can then be used to allow the system to wait until all threads are fully
+		///		operational.
+		///		<para>NOTE: There is no guarantee that all threads will successfully start.</para>
+		/// </remarks>
+		/// <param name="start">A <see cref="T:ParameterizedThreadStart"/> delegate that represents
+		///		the method to be invoked when this thread begins executing.</param>
+		/// <param name="parameter">The parameter object to pass to the invoked method.</param>
+		/// <param name="name">The name of the thread, or <b>null</b>. (Optional, defaults to null)</param>
+		public void CreateAdd<TParameter>(ParameterizedThreadStart start, TParameter parameter, string? name = null)
+		{
+			// Add 1 to the countdown for the thread being added.
+			if (!_servicesCountdownEvent.TryAddCount())
+			{
+				throw new InvalidOperationException("Unable to increment countdown events.");
+			}
+
+			if (start == null)
+			{
+				throw new ArgumentNullException(nameof(start));
+			}
+
+			lock (((ICollection)_threads).SyncRoot)
+			{
+				ParameterizedThreadSetItem<TParameter> threadSetItem = new(
+					new Thread(start)
+					{
+						Name = (name is not null ? name : start.Method.Name),
+					},
+					parameter
+				);
+
+				_threads.Add(threadSetItem);
+			}
 		}
 
 		/// <summary>
@@ -163,9 +229,13 @@ namespace openSourceC.NetCoreLibrary.Threading
 		/// </summary>
 		public void Join()
 		{
-			foreach (Thread thread in _threads)
+			lock (((ICollection)_threads).SyncRoot)
 			{
-				thread.Join();
+				for (int i = _threads.Count; i-- != 0;)
+				{
+					_threads[i].Thread.Join();
+					_threads.RemoveAt(i);
+				}
 			}
 		}
 
@@ -185,9 +255,21 @@ namespace openSourceC.NetCoreLibrary.Threading
 		{
 			bool terminated = true;
 
-			foreach (Thread thread in _threads)
+			lock (((ICollection)_threads).SyncRoot)
 			{
-				terminated &= thread.Join(millisecondsTimeout);
+				for (int i = _threads.Count; i-- != 0;)
+				{
+					Thread thread = _threads[i].Thread;
+
+					if (thread.Join(millisecondsTimeout))
+					{
+						_threads.RemoveAt(i);
+					}
+					else
+					{
+						terminated = false;
+					}
+				}
 			}
 
 			return terminated;
@@ -209,9 +291,21 @@ namespace openSourceC.NetCoreLibrary.Threading
 		{
 			bool terminated = true;
 
-			foreach (Thread thread in _threads)
+			lock (((ICollection)_threads).SyncRoot)
 			{
-				terminated &= thread.Join(timeout);
+				for (int i = _threads.Count; i-- != 0;)
+				{
+					Thread thread = _threads[i].Thread;
+
+					if (thread.Join(timeout))
+					{
+						_threads.RemoveAt(i);
+					}
+					else
+					{
+						terminated = false;
+					}
+				}
 			}
 
 			return terminated;
@@ -224,9 +318,14 @@ namespace openSourceC.NetCoreLibrary.Threading
 		{
 			_servicesCountdownEvent.Signal();
 
-			foreach (Thread thread in _threads)
+			lock (((ICollection)_threads).SyncRoot)
 			{
-				thread.Start(_servicesCountdownEvent);
+				foreach (ThreadSetItem threadSetItem in _threads)
+				{
+					ThreadSetParameter threadSetParameter = threadSetItem.GetThreadSetParameter(_cancellationTokenSource.Token, _servicesCountdownEvent);
+
+					threadSetItem.Thread.Start(threadSetParameter);
+				}
 			}
 		}
 
@@ -269,6 +368,41 @@ namespace openSourceC.NetCoreLibrary.Threading
 		public bool Wait(int millisecondsTimeout, CancellationToken cancellationToken)
 		{
 			return _servicesCountdownEvent.Wait(millisecondsTimeout, cancellationToken);
+		}
+
+		#endregion
+
+		#region Private Classes
+
+		private class ParameterizedThreadSetItem<TParameter> : ThreadSetItem
+		{
+			public ParameterizedThreadSetItem(Thread thread, TParameter parameter)
+				: base(thread)
+			{
+				Parameter = parameter;
+			}
+
+			public TParameter Parameter;
+
+			public override ThreadSetParameter GetThreadSetParameter(CancellationToken cancellationToken, CountdownEvent countdownEvent)
+			{
+				return new ThreadSetParameter<TParameter>(cancellationToken, countdownEvent, Parameter);
+			}
+		}
+
+		private class ThreadSetItem
+		{
+			public ThreadSetItem(Thread thread)
+			{
+				Thread = thread;
+			}
+
+			public Thread Thread;
+
+			public virtual ThreadSetParameter GetThreadSetParameter(CancellationToken cancellationToken, CountdownEvent countdownEvent)
+			{
+				return new ThreadSetParameter(cancellationToken, countdownEvent);
+			}
 		}
 
 		#endregion

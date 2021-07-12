@@ -88,7 +88,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		/// </returns>
 		public static StringBuilder AppendQueryStringPair(this StringBuilder stringBuilder, string key, char[]? value, char[]? defaultValue = null)
 		{
-			if ((value ??= defaultValue) != null)
+			if ((value ??= defaultValue) is not null)
 			{
 				return stringBuilder.AppendQueryStringPair(key, new string(value!));
 			}
@@ -194,7 +194,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		/// </returns>
 		public static StringBuilder AppendQueryStringPair(this StringBuilder stringBuilder, string key, IEnumerable<string>? value, IEnumerable<string>? defaultValue = null)
 		{
-			if ((value ??= defaultValue) != null)
+			if ((value ??= defaultValue) is not null)
 			{
 				StringBuilder sb = new StringBuilder();
 
@@ -442,7 +442,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		/// </returns>
 		public static StringBuilder AppendQueryStringPair(this StringBuilder stringBuilder, string key, string[]? value, string[]? defaultValue = null)
 		{
-			if ((value ??= defaultValue) != null)
+			if ((value ??= defaultValue) is not null)
 			{
 				StringBuilder sb = new StringBuilder();
 

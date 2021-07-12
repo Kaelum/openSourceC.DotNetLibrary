@@ -17,13 +17,15 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		///		Returns the concatenated list of <see cref="P:Exception.Message"/> properties from
 		///		the root exception through all of the inner exceptions.
 		/// </returns>
-		public static string GetMesages(this Exception source)
+		public static string GetMessages(this Exception source)
 		{
-			Exception? e = source;
-			StringBuilder messages = new StringBuilder(source.Message);
+			Exception e = source;
+			StringBuilder messages = new(e.Message);
 
-			while ((e = e.InnerException) != null)
+			while (e.InnerException is not null)
 			{
+				e = e.InnerException;
+
 				messages.Append(" ---> ").Append(e.Message);
 			}
 

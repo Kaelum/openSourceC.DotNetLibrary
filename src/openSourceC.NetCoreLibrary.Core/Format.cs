@@ -132,13 +132,13 @@ namespace openSourceC.NetCoreLibrary
 					sf = st.GetFrame(st.FrameCount - 1);
 					mb = sf?.GetMethod();
 
-					if (mb != null && mb.DeclaringType != null)
+					if (mb is not null && mb.DeclaringType is not null)
 					{
 						strBuilder.AppendFormat("{0}.{1}", mb.DeclaringType.FullName, mb.Name);
 					}
 
 #if DEBUG
-					if (sf != null && sf.GetFileLineNumber() != 0)
+					if (sf is not null && sf.GetFileLineNumber() != 0)
 					{
 						strBuilder.AppendFormat(": line {0}", sf.GetFileLineNumber());
 					}
@@ -165,7 +165,7 @@ namespace openSourceC.NetCoreLibrary
 			strBuilder.Append(exceptionToString);
 #endif
 
-			while (e != null)
+			while (e is not null)
 			{
 #if !USE_EXCEPTION_TOSTRING
 				if (strBuilder.Length != 0)

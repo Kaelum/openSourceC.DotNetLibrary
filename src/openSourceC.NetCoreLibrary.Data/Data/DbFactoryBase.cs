@@ -47,7 +47,7 @@ namespace openSourceC.NetCoreLibrary.Data
 #if DIAGNOSTICS
 			Debug.WriteLine($"DbFactory Provider: Name: {provider.Name}, ConnectionStringName: {provider.ConnectionStringName}");
 
-			if (provider.ElementInformation != null && provider.ElementInformation.Properties != null)
+			if (provider.ElementInformation is not null && provider.ElementInformation.Properties is not null)
 			{
 				foreach (PropertyInformation pi in provider.ElementInformation.Properties)
 				{

@@ -9,8 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{3A58054A-F
 		..\.gitignore = ..\.gitignore
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B361DDE1-8DA9-4A1F-9181-9084B8ECBED0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{10EE6117-808E-42BA-A387-3E8AACED3C13}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+		Directory.Build.targets = Directory.Build.targets
+		global.json = global.json
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
@@ -90,6 +94,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35033A40-D74B-474A-84F1-250B06F211D2} = {10EE6117-808E-42BA-A387-3E8AACED3C13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76E11D12-303B-4A5A-B9AD-024B0D786A77}

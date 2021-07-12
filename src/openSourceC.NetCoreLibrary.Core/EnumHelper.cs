@@ -123,13 +123,13 @@ namespace openSourceC.NetCoreLibrary
 			{
 				if (
 					field.Name.Equals(serializedValue, comparisonType)
-					|| ((EnumMemberAttribute[])field.GetCustomAttributes(typeof(EnumMemberAttribute), false)).Any(t => t.Value.Equals(serializedValue, comparisonType))
-					|| ((XmlEnumAttribute[])field.GetCustomAttributes(typeof(XmlEnumAttribute), false)).Any(t => t.Name.Equals(serializedValue, comparisonType))
+					|| ((EnumMemberAttribute[])field.GetCustomAttributes(typeof(EnumMemberAttribute), false)).Any(t => serializedValue.Equals(t.Value, comparisonType))
+					|| ((XmlEnumAttribute[])field.GetCustomAttributes(typeof(XmlEnumAttribute), false)).Any(t => serializedValue.Equals(t.Name, comparisonType))
 				)
 				{
 					object? rawValue = field.GetRawConstantValue();
 
-					if (rawValue != null)
+					if (rawValue is not null)
 					{
 						result = (TEnum)rawValue;
 						return true;
@@ -213,7 +213,7 @@ namespace openSourceC.NetCoreLibrary
 				{
 					object? rawValue = field.GetRawConstantValue();
 
-					if (rawValue != null)
+					if (rawValue is not null)
 					{
 						result = (TEnum)rawValue;
 						return true;
@@ -292,7 +292,7 @@ namespace openSourceC.NetCoreLibrary
 				{
 					object? rawValue = field.GetRawConstantValue();
 
-					if (rawValue != null)
+					if (rawValue is not null)
 					{
 						result = (TEnum)rawValue;
 						return true;

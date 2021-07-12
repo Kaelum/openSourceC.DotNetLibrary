@@ -84,7 +84,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 						{
 							value = dictionaryEntry.Value;
 						}
-						else if (enumeration != null && enumeration.GetType().IsGenericType && enumeration.GetType().Name.StartsWith("KeyValuePair"))
+						else if (enumeration is not null && enumeration.GetType().IsGenericType && enumeration.GetType().Name.StartsWith("KeyValuePair"))
 						{
 							value = enumeration.GetProperty("Value");
 						}
@@ -95,7 +95,7 @@ namespace openSourceC.NetCoreLibrary.Extensions
 
 						if (value == null)
 						{
-							if (enumeration != null)
+							if (enumeration is not null)
 							{
 								List<ValidationResult> nestedResults = new List<ValidationResult>();
 

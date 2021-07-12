@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 
 using openSourceC.NetCoreLibrary.Configuration;
 
+using SR = openSourceC.NetCoreLibrary.SR;
+
 namespace openSourceC.NetCoreLibrary
 {
 	/// <summary>
@@ -90,7 +92,7 @@ namespace openSourceC.NetCoreLibrary
 #if DIAGNOSTICS
 			Debug.WriteLine($"Provider: {SettingsElement.Type}");
 
-			if (SettingsElement.ElementInformation != null && SettingsElement.ElementInformation.Properties != null)
+			if (SettingsElement.ElementInformation is not null && SettingsElement.ElementInformation.Properties is not null)
 			{
 				foreach (PropertyInformation pi in SettingsElement.ElementInformation.Properties)
 				{
@@ -137,7 +139,7 @@ namespace openSourceC.NetCoreLibrary
 #if DIAGNOSTICS
 				Debug.WriteLine($"Provider: {settings.Type}");
 
-				if (settings.ElementInformation != null && settings.ElementInformation.Properties != null)
+				if (settings.ElementInformation is not null && settings.ElementInformation.Properties is not null)
 				{
 					foreach (PropertyInformation pi in settings.ElementInformation.Properties)
 					{
@@ -395,7 +397,7 @@ namespace openSourceC.NetCoreLibrary
 			{
 				if (_initialized)
 				{
-					throw new InvalidOperationException(SR.GetString("Provider_Already_Initialized"));
+					throw new InvalidOperationException(SR.Provider_Already_Initialized);
 				}
 
 				_initialized = true;

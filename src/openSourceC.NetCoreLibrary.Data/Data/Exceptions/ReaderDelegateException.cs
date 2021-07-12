@@ -101,7 +101,7 @@ namespace openSourceC.NetCoreLibrary.Data
 
 		private void SaveParameters(DbFactoryCommand command)
 		{
-			if (command != null)
+			if (command is not null)
 			{
 				ExtendedMessage = command.ToString();
 			}

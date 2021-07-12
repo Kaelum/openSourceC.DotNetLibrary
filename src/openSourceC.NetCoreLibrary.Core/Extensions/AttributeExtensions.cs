@@ -89,13 +89,16 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		///		The value of the <see cref="T:EnumMemberAttribute"/> for the specified enumerator
 		///		member if it exists; otherwise, the lowercase value of the member name.
 		/// </returns>
-		public static string GetEnumMember(this Enum enumerator)
+		public static string? GetEnumMember(this Enum enumerator)
 		{
-			return (
-				enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(EnumMemberAttribute), true).SingleOrDefault() is EnumMemberAttribute attribute
-				? attribute.Value
-				: enumerator.ToString().ToLowerInvariant()
-			);
+			object? attribute = enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(EnumMemberAttribute), true).SingleOrDefault();
+
+			if (attribute is EnumMemberAttribute enumMemberAttribute)
+			{
+				return enumMemberAttribute.Value;
+			}
+
+			return enumerator.ToString().ToLowerInvariant();
 		}
 
 		#endregion
@@ -217,13 +220,16 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		///		The value of the <see cref="T:XmlEnumAttribute"/> for the specified enumerator
 		///		member if it exists; otherwise, the lowercase value of the member name.
 		/// </returns>
-		public static string GetXmlEnum(this Enum enumerator)
+		public static string? GetXmlEnum(this Enum enumerator)
 		{
-			return (
-				enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(XmlEnumAttribute), true).SingleOrDefault() is XmlEnumAttribute attribute
-				? attribute.Name
-				: enumerator.ToString().ToLowerInvariant()
-			);
+			object? attribute = enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(XmlEnumAttribute), true).SingleOrDefault();
+
+			if (attribute is XmlEnumAttribute xmlEnumAttribute)
+			{
+				return xmlEnumAttribute.Name;
+			}
+
+			return enumerator.ToString().ToLowerInvariant();
 		}
 
 		#endregion

@@ -128,14 +128,14 @@ namespace openSourceC.NetCoreLibrary.Data
 				if (disposing)
 				{
 					// Dispose managed resources.
-					if (_paramsHelper != null)
+					if (_paramsHelper is not null)
 					{
 						// Dispose of the ParamsHelper object.
 						_paramsHelper.Dispose();
 						_paramsHelper = null;
 					}
 
-					if (_cmd != null)
+					if (_cmd is not null)
 					{
 						// Dispose of the command object.
 						_cmd.Dispose();
@@ -316,7 +316,7 @@ namespace openSourceC.NetCoreLibrary.Data
 			{
 				_cmd.Connection.EnlistTransaction(System.Transactions.Transaction.Current);
 			}
-			else if (_cmd.Transaction == null && _factory.Transaction != null)
+			else if (_cmd.Transaction == null && _factory.Transaction is not null)
 			{
 				_cmd.Transaction = _factory.Transaction;
 			}

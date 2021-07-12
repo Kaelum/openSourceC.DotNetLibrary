@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -79,9 +80,9 @@ namespace openSourceC.NetCoreLibrary.Threading
 
 					Debug.WriteLine($"{nameof(ServiceThreadSet)}-DISPOSE-START ({currentThread.ManagedThreadId.ToString()})");
 
-					while (!Join(10) && _serviceThreads.Count != 0)
+					while (_serviceThreads.Count != 0)
 					{
-						Thread.Sleep(10);
+						Join(10);
 					}
 
 					Debug.WriteLine($"{nameof(ServiceThreadSet)}-DISPOSE-END ({currentThread.ManagedThreadId.ToString()})");
@@ -112,25 +113,31 @@ namespace openSourceC.NetCoreLibrary.Threading
 		#region Public Methods
 
 		/// <summary>
-		///		Add the specified <see cref="T:IService"/> object to the service thread set.
+		///		Add the specified <see cref="T:IService"/> object to the service thread set and
+		///		start executing the <see cref="M:IService.Execute()"/> method.
 		/// </summary>
 		/// <param name="service">The <see cref="T:IService"/> object.</param>
 		/// <returns>
 		///		The unique service thread instance identifier.
 		/// </returns>
-		public Guid Add(IService service)
+		public Guid AddStart(IService service)
 		{
-			ServiceThread serviceThread = new ServiceThread(
-				service ?? throw new ArgumentNullException(nameof(service)),
-				new Thread(service.Execute)
-				{
-					//Name = "ServiceMethod Processing",
-				}
-			);
+			ServiceThread serviceThread;
 
-			serviceThread.Thread.Start();
+			lock (((ICollection)_serviceThreads).SyncRoot)
+			{
+				serviceThread = new ServiceThread(
+					service ?? throw new ArgumentNullException(nameof(service)),
+					new Thread(service.Execute)
+					{
+						//Name = "ServiceMethod Processing",
+					}
+				);
 
-			_serviceThreads.Add(serviceThread.InstanceId, serviceThread);
+				serviceThread.Thread.Start();
+
+				_serviceThreads.Add(serviceThread.InstanceId, serviceThread);
+			}
 
 			return serviceThread.InstanceId;
 		}
@@ -141,12 +148,41 @@ namespace openSourceC.NetCoreLibrary.Threading
 		/// </summary>
 		public void Join()
 		{
-			foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
+			lock (((ICollection)_serviceThreads).SyncRoot)
 			{
-				serviceThread.Thread.Join();
+				foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
+				{
+					serviceThread.Thread.Join();
 
-				_serviceThreads.Remove(serviceThread.InstanceId);
+					_serviceThreads.Remove(serviceThread.InstanceId);
+				}
 			}
+		}
+
+		/// <summary>
+		///		Blocks the calling thread until the specified service thread instance terminates,
+		///		while continuing to perform standard COM and SendMessage pumping.
+		/// </summary>
+		/// <param name="instanceId">The unique service thread instance identifier to remove.</param>
+		/// <returns>
+		///		<b>true</b> if the service thread instance is successfully removed; otherwise,
+		///		<b>false</b>. This method also returns false if the instance was not found.
+		/// </returns>
+		public bool Join(Guid instanceId)
+		{
+			bool removed = false;
+
+			lock (((ICollection)_serviceThreads).SyncRoot)
+			{
+				if (_serviceThreads.TryGetValue(instanceId, out ServiceThread? serviceThread))
+				{
+					serviceThread.Thread.Join();
+
+					removed = _serviceThreads.Remove(instanceId);
+				}
+			}
+
+			return removed;
 		}
 
 		/// <summary>
@@ -165,15 +201,18 @@ namespace openSourceC.NetCoreLibrary.Threading
 		{
 			bool terminated = true;
 
-			foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
+			lock (((ICollection)_serviceThreads).SyncRoot)
 			{
-				if (serviceThread.Thread.Join(millisecondsTimeout))
+				foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
 				{
-					_serviceThreads.Remove(serviceThread.InstanceId);
-				}
-				else
-				{
-					terminated = false;
+					if (serviceThread.Thread.Join(millisecondsTimeout))
+					{
+						_serviceThreads.Remove(serviceThread.InstanceId);
+					}
+					else
+					{
+						terminated = false;
+					}
 				}
 			}
 
@@ -196,39 +235,22 @@ namespace openSourceC.NetCoreLibrary.Threading
 		{
 			bool terminated = true;
 
-			foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
+			lock (((ICollection)_serviceThreads).SyncRoot)
 			{
-				if (serviceThread.Thread.Join(timeout))
+				foreach (ServiceThread serviceThread in _serviceThreads.Values.ToArray())
 				{
-					_serviceThreads.Remove(serviceThread.InstanceId);
-				}
-				else
-				{
-					terminated = false;
+					if (serviceThread.Thread.Join(timeout))
+					{
+						_serviceThreads.Remove(serviceThread.InstanceId);
+					}
+					else
+					{
+						terminated = false;
+					}
 				}
 			}
 
 			return terminated;
-		}
-
-		/// <summary>
-		///		Remove the specified service thread instance from the service thread set.
-		/// </summary>
-		/// <param name="instanceId">The unique service thread instance identifier to remove.</param>
-		/// <returns>
-		///		<b>true</b> if the service thread instance is successfully removed; otherwise,
-		///		<b>false</b>. This method also returns false if the instance was not found.
-		/// </returns>
-		public bool Remove(Guid instanceId)
-		{
-			bool removed = false;
-
-			if (_serviceThreads.TryGetValue(instanceId, out ServiceThread? serviceThread))
-			{
-				removed = _serviceThreads.Remove(instanceId);
-			}
-
-			return removed;
 		}
 
 		#endregion

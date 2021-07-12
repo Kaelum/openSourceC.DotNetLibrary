@@ -44,7 +44,7 @@ namespace openSourceC.NetCoreLibrary
 				{
 					frame = trace.GetFrame(index);
 
-					if (frame != null && frame.GetMethod()?.DeclaringType == calledType)
+					if (frame is not null && frame.GetMethod()?.DeclaringType == calledType)
 					{
 						break;
 					}
@@ -56,7 +56,7 @@ namespace openSourceC.NetCoreLibrary
 				{
 					frame = trace.GetFrame(index);
 
-					if (frame != null && frame.GetMethod()?.DeclaringType != calledType)
+					if (frame is not null && frame.GetMethod()?.DeclaringType != calledType)
 					{
 						break;
 					}
@@ -68,11 +68,11 @@ namespace openSourceC.NetCoreLibrary
 
 				MethodBase? method = frame.GetMethod();
 
-				if (method != null)
+				if (method is not null)
 				{
 					MethodName = method.Name;
 
-					if (method.DeclaringType != null)
+					if (method.DeclaringType is not null)
 					{
 						ClassName = method.DeclaringType?.FullName;
 					}

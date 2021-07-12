@@ -122,7 +122,7 @@ namespace openSourceC.NetCoreLibrary
 			{
 				if (_initialized)
 				{
-					throw new InvalidOperationException(SR.GetString("Provider_Already_Initialized"));
+					throw new InvalidOperationException(SR.Provider_Already_Initialized);
 				}
 
 				_initialized = true;

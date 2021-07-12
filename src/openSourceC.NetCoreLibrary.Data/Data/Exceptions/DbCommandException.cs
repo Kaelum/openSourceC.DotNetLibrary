@@ -213,7 +213,7 @@ namespace openSourceC.NetCoreLibrary.Data
 
 		private void SaveParameters(DbFactoryCommand command, int? returnCode)
 		{
-			if (command != null)
+			if (command is not null)
 			{
 				ExtendedMessage = command.ToString();
 			}
