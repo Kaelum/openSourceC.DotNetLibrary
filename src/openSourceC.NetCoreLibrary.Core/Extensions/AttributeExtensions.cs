@@ -89,11 +89,11 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		///		The value of the <see cref="T:EnumMemberAttribute"/> for the specified enumerator
 		///		member if it exists; otherwise, the lowercase value of the member name.
 		/// </returns>
-		public static string? GetEnumMember(this Enum enumerator)
+		public static string GetEnumMember(this Enum enumerator)
 		{
 			object? attribute = enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(EnumMemberAttribute), true).SingleOrDefault();
 
-			if (attribute is EnumMemberAttribute enumMemberAttribute)
+			if (attribute is EnumMemberAttribute enumMemberAttribute && enumMemberAttribute.Value is not null)
 			{
 				return enumMemberAttribute.Value;
 			}
@@ -220,11 +220,11 @@ namespace openSourceC.NetCoreLibrary.Extensions
 		///		The value of the <see cref="T:XmlEnumAttribute"/> for the specified enumerator
 		///		member if it exists; otherwise, the lowercase value of the member name.
 		/// </returns>
-		public static string? GetXmlEnum(this Enum enumerator)
+		public static string GetXmlEnum(this Enum enumerator)
 		{
 			object? attribute = enumerator.GetType().GetField(enumerator.ToString())?.GetCustomAttributes(typeof(XmlEnumAttribute), true).SingleOrDefault();
 
-			if (attribute is XmlEnumAttribute xmlEnumAttribute)
+			if (attribute is XmlEnumAttribute xmlEnumAttribute && xmlEnumAttribute.Name is not null)
 			{
 				return xmlEnumAttribute.Name;
 			}
