@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <RootNamespace>openSourceC.DotNetLibrary</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Company>WGB Enterprises</Company>
+    <Copyright>Copyright © 2020 WGB Enterprises</Copyright>
+    <Authors>William Bosacker</Authors>
+    <AssemblyOriginatorKeyFile>..\.resources\openSourceC.DotNetLibrary.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>openSourceC.DotNetLibrary.Windows.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\.resources\License.openSourceC.DotNetLibrary.html" Link="Properties\License.openSourceC.DotNetLibrary.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.resources\openSourceC.DotNetLibrary.snk" Link="Properties\openSourceC.DotNetLibrary.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\openSourceC.DotNetLibrary.Core\openSourceC.DotNetLibrary.Core.csproj" />
+  </ItemGroup>
+
+</Project>
