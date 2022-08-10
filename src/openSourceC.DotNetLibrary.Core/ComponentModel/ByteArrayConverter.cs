@@ -33,7 +33,7 @@ namespace openSourceC.DotNetLibrary.ComponentModel
 		/// <param name="culture"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object? value)
+		public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
 		{
 			if (value is string stringValue)
 			{
@@ -53,9 +53,9 @@ namespace openSourceC.DotNetLibrary.ComponentModel
 		/// <returns></returns>
 		public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
 		{
-			if (destinationType == typeof(string))
+			if (destinationType == typeof(string) && value is byte[] byteArray)
 			{
-				return HexConvert.ByteArrayToString((byte[]?)value);
+				return HexConvert.ByteArrayToString(byteArray);
 			}
 
 			return base.ConvertTo(context, culture, value, destinationType);

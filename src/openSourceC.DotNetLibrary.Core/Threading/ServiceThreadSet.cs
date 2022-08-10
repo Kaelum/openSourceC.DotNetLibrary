@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
+using ThreadState = System.Threading.ThreadState;
+
 namespace openSourceC.DotNetLibrary.Threading
 {
 	/// <summary>
@@ -97,10 +99,10 @@ namespace openSourceC.DotNetLibrary.Threading
 		#region Public Properties
 
 		/// <summary>Gets a value indicating whether all threads are alive.</summary>
-		public bool AllAlive => _serviceThreads.All(t => t.Value.Thread.IsAlive);
+		public bool AllAlive => _serviceThreads.All(t => (t.Value.Thread.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0);
 
 		/// <summary>Gets a value indicating whether any thread is alive.</summary>
-		public bool AnyAlive => _serviceThreads.Any(t => t.Value.Thread.IsAlive);
+		public bool AnyAlive => _serviceThreads.Any(t => (t.Value.Thread.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0);
 
 		/// <summary>Gets a value indicating whether all threads are fully operational.</summary>
 		public bool AllFullyOperational => _serviceThreads.All(t => t.Value.Service.IsFullyOperational);

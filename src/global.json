@@ -5,7 +5,9 @@
 		"Service.Sdk": "5.0.0",
 		"Client.Sdk": "1.0.0-beta"
 	},
-	"sdk-": {
-		"version": "5.0.301"
+	"sdk": {
+		"-version": "6.0.0",
+		"rollForward": "latestMajor",
+		"allowPrerelease": false
 	}
 }

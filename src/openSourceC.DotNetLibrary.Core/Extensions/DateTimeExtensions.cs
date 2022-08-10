@@ -12,10 +12,12 @@ namespace openSourceC.DotNetLibrary.Extensions
 		///		Converts a UNIX time (long) to a <see cref="T:DateTime"/>.
 		/// </summary>
 		/// <param name="value"></param>
-		/// <returns></returns>
-		public static DateTime ToDateTime(this long value)
+		/// <returns>
+		///		A <see cref="T:DateTime"/> that represents the UNIX time.
+		/// </returns>
+		public static DateTime DateTimeFromUnixTimeSeconds(this long value)
 		{
-			return DateTime.UnixEpoch.AddMilliseconds(value);
+			return DateTime.UnixEpoch.AddSeconds(value);
 		}
 
 		/// <summary>
@@ -69,6 +71,37 @@ namespace openSourceC.DotNetLibrary.Extensions
 			if (obj.HasValue)
 			{
 				return ToFriendlyString(obj.Value);
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		///		Converts a <see cref="T:DateTime"/> to a UNIX time (long).
+		/// </summary>
+		/// <param name="obj">The <see cref="T:DateTime"/> object.</param>
+		/// <returns>
+		///		A UNIX time (long) value.
+		/// </returns>
+		public static long ToUnixTimeSeconds(this DateTime obj)
+		{
+			TimeSpan timeSpan = obj.Subtract(DateTime.UnixEpoch);
+
+			return (long)timeSpan.TotalSeconds;
+		}
+
+		/// <summary>
+		///		Converts a <see cref="T:DateTime"/> to a UNIX time (long).
+		/// </summary>
+		/// <param name="obj">The nullable <see cref="T:DateTime"/> object.</param>
+		/// <returns>
+		///		A UNIX time (long) value.
+		/// </returns>
+		public static long? ToUnixTimeSeconds(this DateTime? obj)
+		{
+			if (obj.HasValue)
+			{
+				return ToUnixTimeSeconds(obj.Value);
 			}
 
 			return null;

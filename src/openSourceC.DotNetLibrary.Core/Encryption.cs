@@ -86,7 +86,7 @@ namespace openSourceC.DotNetLibrary
 		///		A byte array with the decrypted data.
 		///	</returns>
 		public static byte[] Decrypt<TSymmetricAlgorithm>(byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -119,7 +119,7 @@ namespace openSourceC.DotNetLibrary
 		/// <param name="cryptoStreamWriteDelegate">The delegate that writes to the
 		///		<see cref="CryptoStream"/>.</param>
 		public static void Decrypt<TSymmetricAlgorithm>(Stream stream, byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -147,11 +147,11 @@ namespace openSourceC.DotNetLibrary
 		///	</returns>
 		public static string DecryptFromBase64String(string buffer, byte[] key, byte[] iv)
 		{
-			// RijndaelManaged
+			// Aes
 			// DESCryptoServiceProvider
 			// RC2CryptoServiceProvider
 			// TripleDESCryptoServiceProvider
-			return Encoding.UTF8.GetString(DecryptFromBase64String<RijndaelManaged>(buffer, key, iv));
+			return Encoding.UTF8.GetString(DecryptFromBase64String<Aes>(buffer, key, iv));
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace openSourceC.DotNetLibrary
 		/// <param name="key">The secret key.</param>
 		/// <param name="iv">The initialization vector.</param>
 		public static void DecryptFromBase64String<TSymmetricAlgorithm>(Stream stream, string buffer, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -199,7 +199,7 @@ namespace openSourceC.DotNetLibrary
 		///		A byte array with the decrypted data.
 		///	</returns>
 		public static byte[] DecryptFromBase64String<TSymmetricAlgorithm>(string buffer, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -241,7 +241,7 @@ namespace openSourceC.DotNetLibrary
 		///		data; otherwise, null.
 		///	</returns>
 		public static byte[] Encrypt<TSymmetricAlgorithm>(byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate)
-				where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -279,7 +279,7 @@ namespace openSourceC.DotNetLibrary
 		///		data; otherwise, null.
 		///	</returns>
 		public static void Encrypt<TSymmetricAlgorithm>(Stream stream, byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate)
-				where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -306,7 +306,7 @@ namespace openSourceC.DotNetLibrary
 		/// <param name="key">The secret key.</param>
 		/// <param name="iv">The initialization vector.</param>
 		public static void Encrypt<TSymmetricAlgorithm>(Stream stream, string buffer, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -336,7 +336,7 @@ namespace openSourceC.DotNetLibrary
 		///		A byte array with the encrypted data.
 		///	</returns>
 		public static byte[]? Encrypt<TSymmetricAlgorithm>(string buffer, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -364,11 +364,11 @@ namespace openSourceC.DotNetLibrary
 		/// <returns>Encrypted string.</returns>
 		public static string EncryptToBase64String(string buffer, byte[] key, byte[] iv)
 		{
-			// RijndaelManaged
+			// Aes
 			// DESCryptoServiceProvider
 			// RC2CryptoServiceProvider
 			// TripleDESCryptoServiceProvider
-			return EncryptToBase64String<RijndaelManaged>(buffer, key, iv);
+			return EncryptToBase64String<Aes>(buffer, key, iv);
 		}
 
 		/// <summary>
@@ -382,7 +382,7 @@ namespace openSourceC.DotNetLibrary
 		/// <param name="iv">The initialization vector.</param>
 		/// <returns>Encrypted string.</returns>
 		public static string EncryptToBase64String<TSymmetricAlgorithm>(string buffer, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -415,7 +415,7 @@ namespace openSourceC.DotNetLibrary
 		///		Encrypted string.
 		///	</returns>
 		public static string EncryptToBase64String<TSymmetricAlgorithm>(byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			try
 			{
@@ -447,10 +447,10 @@ namespace openSourceC.DotNetLibrary
 		///		<see cref="CryptoStream"/>.</param>
 		/// <param name="action">The action to perform on the decrypted stream.</param>
 		public static void Decrypt<TSymmetricAlgorithm>(byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate, Action<MemoryStream> action)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
-			using (SymmetricAlgorithm algorithm = new TSymmetricAlgorithm())
+			using (SymmetricAlgorithm algorithm = SymmetricAlgorithm.Create(typeof(TSymmetricAlgorithm).Name)!)
 			using (ICryptoTransform cryptoTransform = algorithm.CreateDecryptor(key, iv))
 			using (CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoTransform, CryptoStreamMode.Write))
 			{
@@ -477,10 +477,10 @@ namespace openSourceC.DotNetLibrary
 		///		<see cref="CryptoStream"/>.</param>
 		/// <param name="action">The action to perform on the encrypted stream.</param>
 		private static void Encrypt<TSymmetricAlgorithm>(byte[] key, byte[] iv, CryptoStreamWriteDelegate cryptoStreamWriteDelegate, Action<MemoryStream> action)
-				where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
-			using (SymmetricAlgorithm algorithm = new TSymmetricAlgorithm())
+			using (SymmetricAlgorithm algorithm = SymmetricAlgorithm.Create(typeof(TSymmetricAlgorithm).Name)!)
 			using (ICryptoTransform cryptoTransform = algorithm.CreateEncryptor(key, iv))
 			using (CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoTransform, CryptoStreamMode.Write))
 			{

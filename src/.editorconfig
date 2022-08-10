@@ -1,5 +1,6 @@
 ﻿[*]
 end_of_line = crlf
+guidelines = 100
 
 [*.{cs,vb}]
 #use hard tabs for indentation
@@ -129,3 +130,6 @@ dotnet_style_qualification_for_property = false:suggestion
 
 [*.xml]
 indent_style = space
+
+[*.config]
+indent_style = tab

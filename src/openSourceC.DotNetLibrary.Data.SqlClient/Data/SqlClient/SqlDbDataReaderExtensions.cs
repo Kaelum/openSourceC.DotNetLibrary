@@ -224,9 +224,9 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XElement GetXElementNullSafe(this SqlDataReader dataReader, int ordinal)
+		public static XElement? GetXElementNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
-			try { return dataReader.IsDBNull(ordinal) ? (XElement)null : XElement.Load(dataReader.GetXmlReader(ordinal), LoadOptions.PreserveWhitespace); }
+			try { return dataReader.IsDBNull(ordinal) ? (XElement?)null : XElement.Load(dataReader.GetXmlReader(ordinal), LoadOptions.PreserveWhitespace); }
 			catch (InvalidCastException ex) { throw new OscErrorException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
 			catch (Exception ex) when (!(ex is OscException)) { throw new OscErrorException(string.Format(SR.Exception_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
 		}
@@ -240,7 +240,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XElement GetXElementNullSafe(this SqlDataReader dataReader, string name)
+		public static XElement? GetXElementNullSafe(this SqlDataReader dataReader, string name)
 		{
 			try { return GetXElementNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (IndexOutOfRangeException ex) { throw new OscErrorException(string.Format(SR.Unknown_column, name), ex); }
@@ -260,7 +260,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetXmlElement(this SqlDataReader dataReader, int ordinal)
+		public static XmlElement? GetXmlElement(this SqlDataReader dataReader, int ordinal)
 		{
 			try
 			{
@@ -282,7 +282,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetXmlElement(this SqlDataReader dataReader, string name)
+		public static XmlElement? GetXmlElement(this SqlDataReader dataReader, string name)
 		{
 			try { return GetXmlElement(dataReader, dataReader.GetOrdinal(name)); }
 			catch (IndexOutOfRangeException ex) { throw new OscErrorException(string.Format(SR.Unknown_column, name), ex); }
@@ -298,7 +298,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetXmlElementNullSafe(this SqlDataReader dataReader, int ordinal)
+		public static XmlElement? GetXmlElementNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try
 			{
@@ -322,7 +322,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetXmlElementNullSafe(this SqlDataReader dataReader, string name)
+		public static XmlElement? GetXmlElementNullSafe(this SqlDataReader dataReader, string name)
 		{
 			try { return GetXmlElementNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (IndexOutOfRangeException ex) { throw new OscErrorException(string.Format(SR.Unknown_column, name), ex); }

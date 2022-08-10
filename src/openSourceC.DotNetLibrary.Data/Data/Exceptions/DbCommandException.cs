@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Common;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -188,7 +187,7 @@ namespace openSourceC.DotNetLibrary.Data
 
 		#region Private Methods
 
-		private static string BuildMessage(string message, int? returnCode)
+		private static string BuildMessage(string? message, int? returnCode)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -211,7 +210,7 @@ namespace openSourceC.DotNetLibrary.Data
 			return sb.ToString();
 		}
 
-		private void SaveParameters(DbFactoryCommand command, int? returnCode)
+		private void SaveParameters(DbFactoryCommand? command, int? returnCode)
 		{
 			if (command is not null)
 			{

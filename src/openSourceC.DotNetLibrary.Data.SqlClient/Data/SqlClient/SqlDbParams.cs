@@ -15,6 +15,16 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 	/// </summary>
 	public sealed class SqlDbParams : DbParamsBase<SqlDbParams, SqlCommand, SqlParameter>
 	{
+		#region Constructors
+
+		/// <summary>
+		///		Creates instance of SqlDbParams.
+		/// </summary>
+		/// <param name="cmd"></param>
+		public SqlDbParams(SqlCommand cmd) : base(cmd) { }
+
+		#endregion
+
 		#region Public Methods
 
 		#region Add Parameters
@@ -30,7 +40,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddAnsiStringMax(string parameterName, ParameterDirection direction = ParameterDirection.Input)
 		{
-			return AddAnsiStringMax(parameterName, true, (string)null, direction);
+			return AddAnsiStringMax(parameterName, true, (string?)null, direction);
 		}
 
 		/// <summary>
@@ -42,7 +52,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<param name="value">The value of the parameter.</param>
 		///	<param name="direction">The parameter direction. (optional)</param>
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
-		public SqlParameter AddAnsiStringMax(string parameterName, bool isNullable, string value, ParameterDirection direction = ParameterDirection.Input)
+		public SqlParameter AddAnsiStringMax(string parameterName, bool isNullable, string? value, ParameterDirection direction = ParameterDirection.Input)
 		{
 			SqlParameter prm = CreateParameter(null, parameterName, isNullable, value, direction);
 			prm.SqlDbType = SqlDbType.VarChar;
@@ -103,7 +113,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddAnsiStringMax(string parameterName, string sourceColumn, bool sourceColumnIsNullable, ParameterDirection direction = ParameterDirection.Input)
 		{
-			SqlParameter prm = AddAnsiStringMax(parameterName, true, (string)null, direction);
+			SqlParameter prm = AddAnsiStringMax(parameterName, true, (string?)null, direction);
 			prm.SourceColumn = sourceColumn;
 			prm.SourceColumnNullMapping = sourceColumnIsNullable;
 
@@ -135,7 +145,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<param name="value">The value of the parameter.</param>
 		///	<param name="direction">The parameter direction. (optional)</param>
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
-		public SqlParameter AddBinaryMax(string parameterName, bool isNullable, byte[] value, ParameterDirection direction = ParameterDirection.Input)
+		public SqlParameter AddBinaryMax(string parameterName, bool isNullable, byte[]? value, ParameterDirection direction = ParameterDirection.Input)
 		{
 			SqlParameter prm = CreateParameter(null, parameterName, isNullable, value, direction);
 			prm.SqlDbType = SqlDbType.VarBinary;
@@ -252,7 +262,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddStringMax(string parameterName, ParameterDirection direction = ParameterDirection.Input)
 		{
-			return AddStringMax(parameterName, true, (string)null, direction);
+			return AddStringMax(parameterName, true, (string?)null, direction);
 		}
 
 		/// <summary>
@@ -264,7 +274,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<param name="value">The value of the parameter.</param>
 		///	<param name="direction">The parameter direction. (optional)</param>
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
-		public SqlParameter AddStringMax(string parameterName, bool isNullable, string value, ParameterDirection direction = ParameterDirection.Input)
+		public SqlParameter AddStringMax(string parameterName, bool isNullable, string? value, ParameterDirection direction = ParameterDirection.Input)
 		{
 			SqlParameter prm = CreateParameter(null, parameterName, isNullable, value, direction);
 			prm.SqlDbType = SqlDbType.NVarChar;
@@ -325,7 +335,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddStringMax(string parameterName, string sourceColumn, bool sourceColumnIsNullable, ParameterDirection direction = ParameterDirection.Input)
 		{
-			SqlParameter prm = AddStringMax(parameterName, true, (string)null, direction);
+			SqlParameter prm = AddStringMax(parameterName, true, (string?)null, direction);
 			prm.SourceColumn = sourceColumn;
 			prm.SourceColumnNullMapping = sourceColumnIsNullable;
 
@@ -345,7 +355,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddXml(string parameterName, ParameterDirection direction = ParameterDirection.Input)
 		{
-			return AddXml(parameterName, false, (string)null, direction);
+			return AddXml(parameterName, false, (string?)null, direction);
 		}
 
 		/// <summary>
@@ -371,7 +381,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<param name="value">The value of the parameter.</param>
 		///	<param name="direction">The parameter direction. (optional)</param>
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
-		public SqlParameter AddXml(string parameterName, bool isNullable, string value, ParameterDirection direction = ParameterDirection.Input)
+		public SqlParameter AddXml(string parameterName, bool isNullable, string? value, ParameterDirection direction = ParameterDirection.Input)
 		{
 			SqlXml sqlXml;
 
@@ -479,7 +489,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddXml(string parameterName, string sourceColumn, bool sourceColumnIsNullable, ParameterDirection direction = ParameterDirection.Input)
 		{
-			SqlParameter prm = AddXml(parameterName, false, (string)null, direction);
+			SqlParameter prm = AddXml(parameterName, false, (string?)null, direction);
 			prm.SourceColumn = sourceColumn;
 			prm.SourceColumnNullMapping = sourceColumnIsNullable;
 
@@ -509,9 +519,9 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// </summary>
 		///	<param name="parameterName">The name of the parameter.</param>
 		///	<returns>Returns the value of the parameter as a <see cref="SqlXml"/> object.</returns>
-		public SqlXml GetXml(string parameterName)
+		public SqlXml? GetXml(string parameterName)
 		{
-			try { return (SqlXml)GetValue(parameterName); }
+			try { return (SqlXml?)GetValue(parameterName); }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_parameter, NormalizeParameterName(parameterName)), ex); }
 		}
 

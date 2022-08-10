@@ -9,13 +9,15 @@ namespace openSourceC.DotNetLibrary.Extensions
 	public static class DateTimeOffsetExtensions
 	{
 		/// <summary>
-		///		Converts a UNIX time (long) to a <see cref="T:DateTimeOffset"/>.
+		///		Converts a UNIX time (long) to a <see cref="T:DateTime"/>.
 		/// </summary>
 		/// <param name="value"></param>
-		/// <returns></returns>
-		public static DateTimeOffset ToDateTimeOffset(this long value)
+		/// <returns>
+		///		A <see cref="T:DateTime"/> that represents the UNIX time.
+		/// </returns>
+		public static DateTimeOffset DateTimeFromUnixTimeSeconds(this long value)
 		{
-			return DateTimeOffset.UnixEpoch.AddMilliseconds(value);
+			return DateTimeOffset.UnixEpoch.AddSeconds(value);
 		}
 
 		/// <summary>
@@ -30,7 +32,7 @@ namespace openSourceC.DotNetLibrary.Extensions
 			DateTime today = DateTime.Today;
 			int daysDiff = (int)today.Date.Subtract(obj.Date).TotalDays;
 			DateTime lastYearCutoff = today.Date.AddYears(-1).AddDays(1);
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 
 			if (daysDiff == 0)
 			{
@@ -69,6 +71,37 @@ namespace openSourceC.DotNetLibrary.Extensions
 			if (obj.HasValue)
 			{
 				return ToFriendlyString(obj.Value);
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		///		Converts a <see cref="T:DateTime"/> to a UNIX time (long).
+		/// </summary>
+		/// <param name="obj">The <see cref="T:DateTime"/> object.</param>
+		/// <returns>
+		///		A UNIX time (long) value.
+		/// </returns>
+		public static long ToUnixTimeSeconds(this DateTimeOffset obj)
+		{
+			TimeSpan timeSpan = obj.Subtract(DateTimeOffset.UnixEpoch);
+
+			return (long)timeSpan.TotalSeconds;
+		}
+
+		/// <summary>
+		///		Converts a <see cref="T:DateTime"/> to a UNIX time (long).
+		/// </summary>
+		/// <param name="obj">The nullable <see cref="T:DateTime"/> object.</param>
+		/// <returns>
+		///		A UNIX time (long) value.
+		/// </returns>
+		public static long? ToUnixTimeSeconds(this DateTimeOffset? obj)
+		{
+			if (obj.HasValue)
+			{
+				return ToUnixTimeSeconds(obj.Value);
 			}
 
 			return null;

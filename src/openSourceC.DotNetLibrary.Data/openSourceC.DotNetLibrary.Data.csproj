@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU;x86;x64</Platforms>
+    <Platforms>AnyCPU;x86;x64;ARM64</Platforms>
     <RootNamespace>openSourceC.DotNetLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -14,69 +15,59 @@
     <AssemblyOriginatorKeyFile>..\.resources\openSourceC.DotNetLibrary.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
+    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Configuration\DataFactorySection.cs" />
-    <Compile Remove="Configuration\DbFactorySectionBase.cs" />
-    <Compile Remove="Data\DbFactory.cs" />
-    <Compile Remove="Data\DbFactoryBase.cs" />
-    <Compile Remove="Data\DbFactoryCommand.cs" />
-    <Compile Remove="Data\Exceptions\DbCommandException.cs" />
-    <Compile Remove="Data\Exceptions\ReaderDelegateException.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>ARM64</PlatformTarget>
+  </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="..\.resources\License.openSourceC.DotNetLibrary.html" Link="Properties\License.openSourceC.DotNetLibrary.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\.resources\openSourceC.DotNetLibrary.snk" Link="Properties\openSourceC.DotNetLibrary.snk" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Configuration\DataFactorySection.cs" />
-    <None Include="Configuration\DbFactorySectionBase.cs" />
-    <None Include="Data\DbFactory.cs" />
-    <None Include="Data\DbFactoryBase.cs" />
-    <None Include="Data\DbFactoryCommand.cs" />
-    <None Include="Data\Exceptions\DbCommandException.cs" />
-    <None Include="Data\Exceptions\ReaderDelegateException.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Data.Common" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\openSourceC.DotNetLibrary.Core\openSourceC.DotNetLibrary.Core.csproj" />
+    <EmbeddedResource Update="Data\SR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>openSourceC.DotNetLibrary.Data</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -88,11 +79,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Data\SR.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SR.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>openSourceC.DotNetLibrary.Data</CustomToolNamespace>
-    </EmbeddedResource>
+    <None Include="..\.resources\openSourceC.DotNetLibrary.snk" Link="Properties\openSourceC.DotNetLibrary.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\openSourceC.DotNetLibrary.Core\openSourceC.DotNetLibrary.Core.csproj" />
   </ItemGroup>
 
 </Project>

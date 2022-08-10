@@ -16,9 +16,6 @@ namespace openSourceC.DotNetLibrary.Data
 		where TDbCommand : DbCommand
 		where TDbParameter : DbParameter, IDbDataParameter
 	{
-		/// <summary>Contains a baseline date of 01/01/1970.</summary>
-		protected readonly DateTime dateTimeBaseline = new DateTime(1970, 1, 1);
-
 		/// <summary>The current <see cref="T:TDbCommand"/> object.</summary>
 		private TDbCommand _cmd;
 
@@ -1547,7 +1544,7 @@ namespace openSourceC.DotNetLibrary.Data
 		///	<returns>Returns a <typeparamref name="TDbParameter"/> object.</returns>
 		public TDbParameter AddTimeSpan(string parameterName, bool isNullable, TimeSpan? value, ParameterDirection direction = ParameterDirection.Input)
 		{
-			DateTime? dateTime = (value.HasValue ? dateTimeBaseline.AddTicks(value.Value.Ticks) : (DateTime?)null);
+			DateTime? dateTime = (value.HasValue ? DateTime.UnixEpoch.AddTicks(value.Value.Ticks) : (DateTime?)null);
 
 			return CreateParameter(DbType.Time, parameterName, isNullable, dateTime, direction);
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -17,3 +18,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("81fec74f-f2cf-46e5-be70-008c604be150")]
 
 [assembly: CLSCompliant(false)]
+
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]

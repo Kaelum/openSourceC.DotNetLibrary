@@ -70,7 +70,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 								case SqlDbType.Text:
 								case SqlDbType.VarChar:
 								{
-									prmValue = string.Format("'{0}'", prm.Value.ToString().Replace("'", "''"));
+									prmValue = string.Format("'{0}'", prm.Value.ToString()?.Replace("'", "''"));
 									break;
 								}
 
@@ -82,11 +82,11 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 									if (prm.Value.GetType().IsEnum)
 									{
 										object val = Convert.ChangeType(prm.Value, Enum.GetUnderlyingType(prm.Value.GetType()));
-										prmValue = string.Format("{0}", val.ToString().Replace("'", "''"));
+										prmValue = string.Format("{0}", val.ToString()?.Replace("'", "''"));
 									}
 									else
 									{
-										prmValue = string.Format("{0}", prm.Value.ToString().Replace("'", "''"));
+										prmValue = string.Format("{0}", prm.Value.ToString()?.Replace("'", "''"));
 									}
 									break;
 								}
@@ -97,7 +97,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 								case SqlDbType.Real:
 								case SqlDbType.SmallMoney:
 								{
-									prmValue = string.Format("{0}", prm.Value.ToString().Replace("'", "''"));
+									prmValue = string.Format("{0}", prm.Value.ToString()?.Replace("'", "''"));
 									break;
 								}
 
@@ -106,7 +106,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 								case SqlDbType.Timestamp:
 								case SqlDbType.VarBinary:
 								{
-									prmValue = string.Format("'{0}'", prm.Value.ToString().Replace("'", "''"));
+									prmValue = string.Format("'{0}'", prm.Value.ToString()?.Replace("'", "''"));
 									break;
 								}
 
@@ -160,7 +160,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 
 								case SqlDbType.Variant:
 								{
-									prmValue = string.Format("'{0}'", prm.Value.ToString().Replace("'", "''"));
+									prmValue = string.Format("'{0}'", prm.Value.ToString()?.Replace("'", "''"));
 									break;
 								}
 

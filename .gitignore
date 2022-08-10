@@ -261,8 +261,7 @@ paket-files/
 __pycache__/
 *.pyc
 
-/src/openSourceC.NetCoreLibrary.Windows/openSourceC.NetCoreLibrary.Windows.xml
-/src/openSourceC.StandardLibrary.Core/openSourceC.StandardLibrary.Core.xml
-/src/openSourceC.StandardLibrary.Data/openSourceC.StandardLibrary.Data.xml
-/src/openSourceC.NetCoreLibrary.Core/openSourceC.NetCoreLibrary.Core.xml
-/src/openSourceC.NetCoreLibrary.Data/openSourceC.NetCoreLibrary.Data.xml
+/src/openSourceC.DotNetLibrary.Core/openSourceC.DotNetLibrary.Core.xml
+/src/openSourceC.DotNetLibrary.Data/openSourceC.DotNetLibrary.Data.xml
+/src/openSourceC.DotNetLibrary.Data.SqlClient/openSourceC.DotNetLibrary.Data.SqlClient.xml
+/src/openSourceC.DotNetLibrary.Windows/openSourceC.DotNetLibrary.Windows.xml

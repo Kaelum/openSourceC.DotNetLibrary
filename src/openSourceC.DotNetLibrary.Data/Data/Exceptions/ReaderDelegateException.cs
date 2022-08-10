@@ -99,7 +99,7 @@ namespace openSourceC.DotNetLibrary.Data
 
 		#region Private Methods
 
-		private void SaveParameters(DbFactoryCommand command)
+		private void SaveParameters(DbFactoryCommand? command)
 		{
 			if (command is not null)
 			{

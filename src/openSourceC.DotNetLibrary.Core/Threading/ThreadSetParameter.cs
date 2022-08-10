@@ -9,7 +9,7 @@ namespace openSourceC.DotNetLibrary.Threading
 	public class ThreadSetParameter<TParamter> : ThreadSetParameter
 	{
 		/// <summary>
-		///		Create and instance of ThreadSetParameter.
+		///		Create an instance of ThreadSetParameter.
 		/// </summary>
 		/// <param name="cancellationToken"></param>
 		/// <param name="countdownEvent"></param>
@@ -35,8 +35,13 @@ namespace openSourceC.DotNetLibrary.Threading
 	/// </summary>
 	public class ThreadSetParameter
 	{
+		private readonly CountdownEvent _countdownEvent;
+		private bool _fullyOperationalSignaled;
+		private bool _shutdownSignaled;
+
+
 		/// <summary>
-		///		Create and instance of ThreadSetParameter.
+		///		Create an instance of ThreadSetParameter.
 		/// </summary>
 		/// <param name="cancellationToken"></param>
 		/// <param name="countdownEvent"></param>
@@ -46,13 +51,68 @@ namespace openSourceC.DotNetLibrary.Threading
 		)
 		{
 			CancellationToken = cancellationToken;
-			CountdownEvent = countdownEvent;
+
+			_countdownEvent = countdownEvent;
+			_fullyOperationalSignaled = false;
 		}
 
 		/// <summary></summary>
 		public CancellationToken CancellationToken { get; private set; }
 
 		/// <summary></summary>
-		public CountdownEvent CountdownEvent { get; private set; }
+		public bool FullyOperationalSignaled => _fullyOperationalSignaled;
+
+		/// <summary></summary>
+		public bool ShutdownSignaled => _shutdownSignaled;
+
+		/// <summary>
+		///		Signal that the thread is fully operational.
+		/// </summary>
+		/// <remarks>
+		///		Can only be signaled once.  Successive signals are ignored.
+		/// </remarks>
+		public void SignalFullyOperational()
+		{
+			if (!_fullyOperationalSignaled)
+			{
+				lock (_countdownEvent)
+				{
+					if (!_fullyOperationalSignaled && !_shutdownSignaled)
+					{
+						_countdownEvent.Signal();
+					}
+
+					if (!_fullyOperationalSignaled)
+					{
+						_fullyOperationalSignaled = true;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		///		Signal that the thread has shutdown.
+		/// </summary>
+		/// <remarks>
+		///		Can only be signaled once.  Successive signals are ignored.
+		/// </remarks>
+		public void SignalShutdown()
+		{
+			if (!_shutdownSignaled)
+			{
+				lock (_countdownEvent)
+				{
+					if (!_fullyOperationalSignaled && !_shutdownSignaled)
+					{
+						_countdownEvent.Signal();
+					}
+
+					if (!_shutdownSignaled)
+					{
+						_shutdownSignaled = true;
+					}
+				}
+			}
+		}
 	}
 }

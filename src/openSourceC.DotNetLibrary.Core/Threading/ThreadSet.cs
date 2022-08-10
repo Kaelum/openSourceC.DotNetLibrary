@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace openSourceC.DotNetLibrary.Threading
@@ -123,6 +124,9 @@ namespace openSourceC.DotNetLibrary.Threading
 		/// <summary>Gets a value indicating whether all threads are alive.</summary>
 		public bool AllAlive => _threads.All(t => t.Thread.IsAlive);
 
+		/// <summary>Gets a value indicating whether all threads are fully operational.</summary>
+		public bool AllFullyOperational => _threads.All(t => t.FullyOperationalSignaled && !t.ShutdownSignaled);
+
 		/// <summary>Gets a value indicating whether any thread is alive.</summary>
 		public bool AnyAlive => _threads.Any(t => t.Thread.IsAlive);
 
@@ -221,6 +225,17 @@ namespace openSourceC.DotNetLibrary.Threading
 
 				_threads.Add(threadSetItem);
 			}
+		}
+
+		/// <summary>
+		///		Get the <see cref="T:ThreadItemStatus"/> for each thread.
+		/// </summary>
+		/// <returns>
+		///		A <see cref="T:List&lt;T&gt;"/> of <see cref="T:ThreadItemStatus"/> objects.
+		/// </returns>
+		public List<ThreadSetItemStatus> GetThreadItemStatusList()
+		{
+			return _threads.Select(t => new ThreadSetItemStatus(t)).ToList();
 		}
 
 		/// <summary>
@@ -330,6 +345,25 @@ namespace openSourceC.DotNetLibrary.Threading
 		}
 
 		/// <summary>
+		///		Get a string representation of the <see cref="T:ThreadItemStatus"/> for each thread.
+		/// </summary>
+		/// <returns>
+		///		A string representation of the <see cref="T:ThreadItemStatus"/> for each thread.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder threadsStatus = new();
+			threadsStatus.AppendLine($"Thread status: {_threads.Count} threads");
+
+			foreach (ThreadSetItemStatus itemStatus in GetThreadItemStatusList())
+			{
+				threadsStatus.AppendLine($"\t{itemStatus.Name,-32}: IsActive = {itemStatus.IsActive}, FullyOperationalSignaled = {itemStatus.FullyOperationalSignaled}, ShutdownSignaled = {itemStatus.ShutdownSignaled}");
+			}
+
+			return threadsStatus.ToString();
+		}
+
+		/// <summary>
 		///		Blocks the current thread until all of the threads have signaled their readiness
 		///		while observing the <see cref="T:CancellationToken"/>.
 		/// </summary>
@@ -368,41 +402,6 @@ namespace openSourceC.DotNetLibrary.Threading
 		public bool Wait(int millisecondsTimeout, CancellationToken cancellationToken)
 		{
 			return _servicesCountdownEvent.Wait(millisecondsTimeout, cancellationToken);
-		}
-
-		#endregion
-
-		#region Private Classes
-
-		private class ParameterizedThreadSetItem<TParameter> : ThreadSetItem
-		{
-			public ParameterizedThreadSetItem(Thread thread, TParameter parameter)
-				: base(thread)
-			{
-				Parameter = parameter;
-			}
-
-			public TParameter Parameter;
-
-			public override ThreadSetParameter GetThreadSetParameter(CancellationToken cancellationToken, CountdownEvent countdownEvent)
-			{
-				return new ThreadSetParameter<TParameter>(cancellationToken, countdownEvent, Parameter);
-			}
-		}
-
-		private class ThreadSetItem
-		{
-			public ThreadSetItem(Thread thread)
-			{
-				Thread = thread;
-			}
-
-			public Thread Thread;
-
-			public virtual ThreadSetParameter GetThreadSetParameter(CancellationToken cancellationToken, CountdownEvent countdownEvent)
-			{
-				return new ThreadSetParameter(cancellationToken, countdownEvent);
-			}
 		}
 
 		#endregion

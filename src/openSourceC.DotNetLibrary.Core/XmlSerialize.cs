@@ -63,7 +63,7 @@ namespace openSourceC.DotNetLibrary
 		///		An object of type <typeparamref name="TObject"/>.
 		/// </returns>
 		public static TObject? DecryptFromBase64String<TObject, TSymmetricAlgorithm>(string base64XmlString, byte[] key, byte[] iv)
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 #if DEBUG
 			try
@@ -104,11 +104,11 @@ namespace openSourceC.DotNetLibrary
 		/// </returns>
 		public static TObject? DecryptFromBase64String<TObject>(string base64XmlString, byte[] key, byte[] iv)
 		{
-			// RijndaelManaged
+			// Aes
 			// DESCryptoServiceProvider
 			// RC2CryptoServiceProvider
 			// TripleDESCryptoServiceProvider
-			return DecryptFromBase64String<TObject, RijndaelManaged>(base64XmlString, key, iv);
+			return DecryptFromBase64String<TObject, Aes>(base64XmlString, key, iv);
 		}
 
 		#endregion
@@ -435,7 +435,7 @@ namespace openSourceC.DotNetLibrary
 		/// </returns>
 		public static string EncryptToBase64String<TObject, TSymmetricAlgorithm>(TObject obj, byte[] key, byte[] iv, bool supportXsiNamespace = false)
 			where TObject : notnull
-			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+			where TSymmetricAlgorithm : SymmetricAlgorithm
 		{
 #if DEBUG
 			try
@@ -473,11 +473,11 @@ namespace openSourceC.DotNetLibrary
 		public static string EncryptToBase64String<TObject>(TObject obj, byte[] key, byte[] iv, bool supportXsiNamespace = false)
 			where TObject : notnull
 		{
-			// RijndaelManaged
+			// Aes
 			// DESCryptoServiceProvider
 			// RC2CryptoServiceProvider
 			// TripleDESCryptoServiceProvider
-			return EncryptToBase64String<TObject, RijndaelManaged>(obj, key, iv, supportXsiNamespace);
+			return EncryptToBase64String<TObject, Aes>(obj, key, iv, supportXsiNamespace);
 		}
 
 		#endregion

@@ -2,9 +2,6 @@
 using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
-using System.Security.Permissions;
-
-using openSourceC.DotNetLibrary.Data;
 
 namespace openSourceC.DotNetLibrary.Data.SqlClient
 {
@@ -13,6 +10,62 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 	/// </summary>
 	public sealed class SqlDbCommand : DbFactoryCommand<SqlDbFactory, SqlDbCommand, SqlDbParams, SqlConnection, SqlTransaction, SqlCommand, SqlParameter, SqlDataAdapter, SqlDataReader>
 	{
+		private SqlDbFactory _factory;
+		private SqlDbCommand _command;
+
+
+		#region Constructors
+
+		/// <summary>
+		///		Class constructor.
+		/// </summary>
+		public SqlDbCommand(
+			SqlDbFactory factory,
+			string commandText,
+			CommandType commandType,
+			bool autoPrepare
+		)
+		{
+			_factory = factory;
+			_command = new(_factory, commandText, commandType, autoPrepare);
+			_command.CommandTimeout = _command.DefaultCommandTimeout;
+
+			Params = new(_command.Command);
+			Params.AddInt32(_command.ReturnValueParameterName, ParameterDirection.ReturnValue);
+		}
+
+		#endregion
+
+		#region Implement DbFactoryCommand
+
+		/// <summary>
+		///		Gets the current <see cref="T:SqlDbParams"/> object.
+		/// </summary>
+		public override SqlDbParams Params { get; }
+
+		/// <summary>
+		///		Gets the current <see cref="T:SqlDbFactory"/> object.
+		/// </summary>
+		protected override SqlDbFactory DbFactory =>
+			_factory;
+
+		/// <summary>
+		///		Gets the current <see cref="T:SqlCommand"/> object.
+		/// </summary>
+		public override SqlCommand Command =>
+			_command.Command;
+
+		/// <summary>
+		///		Create an instance of <see cref="T:SqlDataAdapter"/>.
+		/// </summary>
+		/// <returns></returns>
+		protected override SqlDataAdapter CreateDataAdapter()
+		{
+			return new(_command.Command);
+		}
+
+		#endregion
+
 #if SUPPORT_ASYNC_EXECUTE_READER
 
 		#region BeginExecuteReader
@@ -180,10 +233,9 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		<b>null</b> to use the default service.</param>
 		/// <param name="timeout">The time-out for this notification in seconds. The default is 0,
 		///		indicating that the server's time-out should be used.</param>
-		[SqlClientPermission(SecurityAction.Demand, Unrestricted = true)]
-		public void RegisterDependency(OnChangeEventHandler eventHandler, string options, int timeout)
+		public void RegisterDependency(OnChangeEventHandler eventHandler, string? options, int timeout)
 		{
-			SqlDependency dependency = new SqlDependency(Command, options, timeout);
+			SqlDependency dependency = new(Command, options, timeout);
 			dependency.OnChange += eventHandler;
 		}
 

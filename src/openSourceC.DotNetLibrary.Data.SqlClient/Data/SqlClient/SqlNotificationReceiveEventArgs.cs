@@ -35,27 +35,27 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		public long MessageSequenceNumber { get; set; }
 
 		/// <summary></summary>
-		public string ServiceName { get; set; }
+		public string? ServiceName { get; set; }
 
 		/// <summary></summary>
 		public int ServiceId { get; set; }
 
 		/// <summary></summary>
-		public string ServiceContractName { get; set; }
+		public string? ServiceContractName { get; set; }
 
 		/// <summary></summary>
 		public int ServiceContractId { get; set; }
 
 		/// <summary></summary>
-		public string MessageTypeName { get; set; }
+		public string? MessageTypeName { get; set; }
 
 		/// <summary></summary>
 		public int MessageTypeId { get; set; }
 
 		/// <summary></summary>
-		public string Validation { get; set; }
+		public string? Validation { get; set; }
 
 		/// <summary></summary>
-		public string MessageBody { get; set; }
+		public string? MessageBody { get; set; }
 	}
 }

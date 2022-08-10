@@ -19,21 +19,17 @@ namespace openSourceC.DotNetLibrary.Data
 	/// <typeparam name="TDbDataReader"></typeparam>
 	public abstract class DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : DbFactoryCommand, IDisposable
 		where TDbFactory : DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>
-		where TDbFactoryCommand : DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
-		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>, new()
+		where TDbFactoryCommand : DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>
+		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>
 		where TDbConnection : DbConnection
 		where TDbTransaction : DbTransaction
 		where TDbCommand : DbCommand
 		where TDbParameter : DbParameter
-		where TDbDataAdapter : DbDataAdapter, new()
+		where TDbDataAdapter : DbDataAdapter
 		where TDbDataReader : DbDataReader
 	{
-		private const int _defaultCommandTimeout = 30;
-		private const string _defaultReturnValueParameterName = "RETURN_VALUE";
-
-		private TDbFactory _factory;
-		private TDbCommand _cmd;
-		private TDbParams _paramsHelper;
+		private const int DEFAULT_COMMAND_TIMEOUT = 30;
+		private const string DEFAULT_RETURN_VALUE_PARAMETER_NAME = "RETURN_VALUE";
 
 		// Track whether Dispose has been called.
 		private bool _disposed = false;
@@ -45,40 +41,6 @@ namespace openSourceC.DotNetLibrary.Data
 		///		Class constructor.
 		/// </summary>
 		protected DbFactoryCommand() { }
-
-		#endregion
-
-		#region Create
-
-		/// <summary>
-		///		Create a new <see cref="T:TDbFactoryCommand"/> object.
-		/// </summary>
-		/// <param name="factory">The factory object.</param>
-		/// <param name="commandText">The command string.</param>
-		/// <param name="commandType">The type of command in commandText.</param>
-		/// <param name="autoPrepare">Indicates that the <b>Execute</b> methods will automatically
-		///		call the <see cref="T:TDbCommand.Prepare" /> method before executing.</param>
-		///	<returns>
-		///		A new <see cref="T:TDbFactoryCommand"/> object.
-		///	</returns>
-		internal static TDbFactoryCommand Create(TDbFactory factory, string commandText, CommandType commandType, bool autoPrepare)
-		{
-			TDbFactoryCommand dbFactoryCommand = new TDbFactoryCommand
-			{
-				_factory = factory,
-				_cmd = (TDbCommand)factory.Connection.CreateCommand(),
-			};
-
-			dbFactoryCommand._cmd.CommandType = commandType;
-			dbFactoryCommand._cmd.CommandText = commandText;
-			dbFactoryCommand._cmd.CommandTimeout = dbFactoryCommand.DefaultCommandTimeout;
-			dbFactoryCommand.AutoPrepare = autoPrepare;
-
-			dbFactoryCommand._paramsHelper = DbParamsBase<TDbParams, TDbCommand, TDbParameter>.Create(dbFactoryCommand._cmd);
-			dbFactoryCommand._paramsHelper.AddInt32(dbFactoryCommand.ReturnValueParameterName, ParameterDirection.ReturnValue);
-
-			return dbFactoryCommand;
-		}
 
 		#endregion
 
@@ -128,19 +90,6 @@ namespace openSourceC.DotNetLibrary.Data
 				if (disposing)
 				{
 					// Dispose managed resources.
-					if (_paramsHelper is not null)
-					{
-						// Dispose of the ParamsHelper object.
-						_paramsHelper.Dispose();
-						_paramsHelper = null;
-					}
-
-					if (_cmd is not null)
-					{
-						// Dispose of the command object.
-						_cmd.Dispose();
-						_cmd = null;
-					}
 
 					// Nullify references to managed resources that are not disposable.
 
@@ -168,18 +117,13 @@ namespace openSourceC.DotNetLibrary.Data
 		/// <summary>
 		///     Gets the default command timeout.
 		/// </summary>
-		protected virtual int DefaultCommandTimeout
-		{
-			get { return _defaultCommandTimeout; }
-		}
+		protected virtual int DefaultCommandTimeout =>
+			DEFAULT_COMMAND_TIMEOUT;
 
 		/// <summary>
 		///		Gets the underlying <typeparamref name="TDbFactory"/> object.
 		/// </summary>
-		protected TDbFactory DbFactory
-		{
-			get { return _factory; }
-		}
+		protected abstract TDbFactory DbFactory { get; }
 
 		#endregion
 
@@ -188,10 +132,7 @@ namespace openSourceC.DotNetLibrary.Data
 		/// <summary>
 		///		Gets the current command.
 		/// </summary>
-		public TDbCommand Command
-		{
-			get { return _cmd; }
-		}
+		public abstract TDbCommand Command { get; }
 
 		/// <summary>
 		///		Gets or sets the text command to run against the data source.
@@ -201,8 +142,8 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </value>
 		public string CommandText
 		{
-			get { return _cmd.CommandText; }
-			set { _cmd.CommandText = value; }
+			get { return Command.CommandText; }
+			set { Command.CommandText = value; }
 		}
 
 		/// <summary>
@@ -215,8 +156,8 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </value>
 		public int CommandTimeout
 		{
-			get { return _cmd.CommandTimeout; }
-			set { _cmd.CommandTimeout = value; }
+			get { return Command.CommandTimeout; }
+			set { Command.CommandTimeout = value; }
 		}
 
 		/// <summary>
@@ -227,8 +168,8 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </value>
 		public CommandType CommandType
 		{
-			get { return _cmd.CommandType; }
-			set { _cmd.CommandType = value; }
+			get { return Command.CommandType; }
+			set { Command.CommandType = value; }
 		}
 
 		/// <summary>
@@ -238,18 +179,13 @@ namespace openSourceC.DotNetLibrary.Data
 		/// <value>
 		///		The connection to the data source.
 		/// </value>
-		public TDbConnection Connection
-		{
-			get { return (TDbConnection)_cmd.Connection; }
-		}
+		public TDbConnection Connection =>
+			(TDbConnection)(Command.Connection ?? throw new NullValueException($"{nameof(Command.Connection)} is null."));
 
 		/// <summary>
 		///		Gets the current <see cref="T:TDbParams"/> object.
 		/// </summary>
-		public TDbParams Params
-		{
-			get { return _paramsHelper; }
-		}
+		public abstract TDbParams Params { get; }
 
 		/// <summary>
 		///		Gets the return value from the last executed command.
@@ -259,18 +195,14 @@ namespace openSourceC.DotNetLibrary.Data
 		///		</para>
 		///		<para>NOTE: May not be valid while the data reader is open.</para>
 		/// </summary>
-		public int? ReturnValue
-		{
-			get { return Params.GetInt32(ReturnValueParameterName); }
-		}
+		public int? ReturnValue =>
+			Params.GetInt32(ReturnValueParameterName);
 
 		/// <summary>
 		///     Gets the name of the parameter that contains the return value.
 		/// </summary>
-		public virtual string ReturnValueParameterName
-		{
-			get { return _defaultReturnValueParameterName; }
-		}
+		public virtual string ReturnValueParameterName =>
+			DEFAULT_RETURN_VALUE_PARAMETER_NAME;
 
 		/// <summary>
 		///		Gets or sets the transaction within which the <b>Command</b> object of a .NET
@@ -282,8 +214,8 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </value>
 		public TDbTransaction Transaction
 		{
-			get { return (TDbTransaction)_cmd.Transaction; }
-			set { _cmd.Transaction = value; }
+			get { return (TDbTransaction)(Command.Transaction ?? throw new NullValueException($"{nameof(Command.Transaction)} is null.")); }
+			set { Command.Transaction = value; }
 		}
 
 		/// <summary>
@@ -299,8 +231,8 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </remarks>
 		public UpdateRowSource UpdatedRowSource
 		{
-			get { return _cmd.UpdatedRowSource; }
-			set { _cmd.UpdatedRowSource = value; }
+			get { return Command.UpdatedRowSource; }
+			set { Command.UpdatedRowSource = value; }
 		}
 
 		#endregion
@@ -312,13 +244,13 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </summary>
 		protected void EnsureTransaction()
 		{
-			if (_factory.AmbientTransactionExists)
+			if (DbFactory.AmbientTransactionExists)
 			{
-				_cmd.Connection.EnlistTransaction(System.Transactions.Transaction.Current);
+				Connection.EnlistTransaction(System.Transactions.Transaction.Current);
 			}
-			else if (_cmd.Transaction == null && _factory.Transaction is not null)
+			else if (Command.Transaction == null && DbFactory.Transaction is not null)
 			{
-				_cmd.Transaction = _factory.Transaction;
+				Command.Transaction = DbFactory.Transaction;
 			}
 		}
 
@@ -340,10 +272,8 @@ namespace openSourceC.DotNetLibrary.Data
 		{
 			EnsureTransaction();
 
-			using (TDbDataAdapter dataAdapter = new TDbDataAdapter())
+			using (TDbDataAdapter dataAdapter = CreateDataAdapter())
 			{
-				dataAdapter.SelectCommand = _cmd;
-
 				if (AutoPrepare)
 				{
 					Command.Prepare();
@@ -365,11 +295,11 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </returns>
 		public int ExecuteNonQuery()
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				Connection.Open();
 			}
 
 			EnsureTransaction();
@@ -378,16 +308,16 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				return _cmd.ExecuteNonQuery();
+				return Command.ExecuteNonQuery();
 			}
 			finally
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -404,11 +334,11 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </returns>
 		public async Task<int> ExecuteNonQueryAsync()
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				await _cmd.Connection.OpenAsync();
+				await Connection.OpenAsync();
 			}
 
 			EnsureTransaction();
@@ -417,16 +347,16 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				return await _cmd.ExecuteNonQueryAsync();
+				return await Command.ExecuteNonQueryAsync();
 			}
 			finally
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -454,21 +384,21 @@ namespace openSourceC.DotNetLibrary.Data
 		///	</returns>
 		public TDbDataReader ExecuteReader(CommandBehavior behavior)
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				Connection.Open();
 			}
 
 			EnsureTransaction();
 
 			if (AutoPrepare)
 			{
-				_cmd.Prepare();
+				Command.Prepare();
 			}
 
-			return (TDbDataReader)_cmd.ExecuteReader(behavior);
+			return (TDbDataReader)Command.ExecuteReader(behavior);
 		}
 
 		#endregion
@@ -488,11 +418,11 @@ namespace openSourceC.DotNetLibrary.Data
 		///	</returns>
 		public TResult ExecuteReader<TResult>(CommandBehavior behavior, Func<TDbFactoryCommand, TDbDataReader, TResult> readerDelegate)
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				Connection.Open();
 			}
 
 			EnsureTransaction();
@@ -501,10 +431,10 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				using (TDbDataReader dr = (TDbDataReader)_cmd.ExecuteReader(behavior))
+				using (TDbDataReader dr = (TDbDataReader)Command.ExecuteReader(behavior))
 				{
 					try
 					{
@@ -525,7 +455,7 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -593,21 +523,21 @@ namespace openSourceC.DotNetLibrary.Data
 		///	</returns>
 		public async Task<TDbDataReader> ExecuteReaderAsync(CommandBehavior behavior)
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				await _cmd.Connection.OpenAsync();
+				await Connection.OpenAsync();
 			}
 
 			EnsureTransaction();
 
 			if (AutoPrepare)
 			{
-				_cmd.Prepare();
+				Command.Prepare();
 			}
 
-			return (TDbDataReader)await _cmd.ExecuteReaderAsync(behavior);
+			return (TDbDataReader)await Command.ExecuteReaderAsync(behavior);
 		}
 
 		#endregion
@@ -627,11 +557,11 @@ namespace openSourceC.DotNetLibrary.Data
 		///	</returns>
 		public async Task<TResult> ExecuteReaderAsync<TResult>(CommandBehavior behavior, Func<TDbFactoryCommand, TDbDataReader, Task<TResult>> readerDelegateAsync)
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				await _cmd.Connection.OpenAsync();
+				await Connection.OpenAsync();
 			}
 
 			EnsureTransaction();
@@ -640,10 +570,10 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				using (TDbDataReader dr = (TDbDataReader)await _cmd.ExecuteReaderAsync(behavior))
+				using (TDbDataReader dr = (TDbDataReader)await Command.ExecuteReaderAsync(behavior))
 				{
 					try
 					{
@@ -664,7 +594,7 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -727,13 +657,13 @@ namespace openSourceC.DotNetLibrary.Data
 		///		The first column of the first row in the result set, or a null reference
 		///		(<b>Nothing</b> in Visual Basic) if the result set is empty.
 		///	</returns>
-		public object ExecuteScalar()
+		public object? ExecuteScalar()
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				Connection.Open();
 			}
 
 			EnsureTransaction();
@@ -742,10 +672,10 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				object ro = _cmd.ExecuteScalar();
+				object? ro = Command.ExecuteScalar();
 
 				return (ro is DBNull ? null : ro);
 			}
@@ -753,7 +683,7 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -770,13 +700,13 @@ namespace openSourceC.DotNetLibrary.Data
 		///		The first column of the first row in the result set, or a null reference
 		///		(<b>Nothing</b> in Visual Basic) if the result set is empty.
 		///	</returns>
-		public async Task<object> ExecuteScalarAsync()
+		public async Task<object?> ExecuteScalarAsync()
 		{
-			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+			bool isClosed = (Connection.State == ConnectionState.Closed);
 
 			if (isClosed)
 			{
-				await _cmd.Connection.OpenAsync();
+				await Connection.OpenAsync();
 			}
 
 			EnsureTransaction();
@@ -785,10 +715,10 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (AutoPrepare)
 				{
-					_cmd.Prepare();
+					Command.Prepare();
 				}
 
-				object ro = await _cmd.ExecuteScalarAsync();
+				object? ro = await Command.ExecuteScalarAsync();
 
 				return (ro is DBNull ? null : ro);
 			}
@@ -796,7 +726,7 @@ namespace openSourceC.DotNetLibrary.Data
 			{
 				if (isClosed)
 				{
-					//_cmd.Connection.Close();
+					//Connection.Close();
 				}
 			}
 		}
@@ -810,10 +740,20 @@ namespace openSourceC.DotNetLibrary.Data
 		/// </summary>
 		public void Prepare()
 		{
-			_cmd.Prepare();
+			Command.Prepare();
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Protected Methods
+
+		/// <summary>
+		///		Create an instance of <see cref="T:TDbDataAdapter"/>.
+		/// </summary>
+		/// <returns></returns>
+		protected abstract TDbDataAdapter CreateDataAdapter();
 
 		#endregion
 	}

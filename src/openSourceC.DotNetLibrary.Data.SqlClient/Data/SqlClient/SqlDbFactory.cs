@@ -1,14 +1,10 @@
-﻿using System;
+﻿//#define ENABLE_CONNECTION_TIMEOUT
+
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Diagnostics;
-using System.IO;
-using System.Security.Permissions;
-using System.Text;
 
 namespace openSourceC.DotNetLibrary.Data.SqlClient
 {
@@ -17,10 +13,13 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 	/// </summary>
 	public sealed class SqlDbFactory : DbFactory<SqlDbFactory, SqlDbCommand, SqlDbParams, SqlConnection, SqlTransaction, SqlCommand, SqlParameter, SqlDataAdapter, SqlDataReader>
 	{
-		private const int DEFAULT_CONNECTION_TIMEOUT = 30;
+		private SqlConnection? _cn;
+#if ENABLE_CONNECTION_TIMEOUT
+		private int _connectionTimeout;
+#endif
 
-		private byte[] _filestreamTransactionContext;
-		private Stack<byte[]> _filestreamTransactionContextStack;
+		private byte[]? _filestreamTransactionContext;
+		private Stack<byte[]>? _filestreamTransactionContextStack;
 
 #if SUPPORT_SQL_NOTIFICATION
 		private Guid? _conversationHandle = null;
@@ -34,6 +33,9 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		private static object _serviceBrokerDatabasesLock = new object();
 #endif
 
+		// Track whether Dispose has been called.
+		private bool _disposed = false;
+
 
 		#region Constructors
 
@@ -41,7 +43,57 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		Class constructor.
 		/// </summary>
 		/// <param name="connectionStringName">The name of the connection string to use.</param>
-		public SqlDbFactory(string connectionStringName) : base(connectionStringName) { }
+		public SqlDbFactory(
+			string connectionStringName
+		) : base(
+			connectionStringName
+		)
+		{
+#if ENABLE_CONNECTION_TIMEOUT
+			_connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
+#endif
+		}
+
+		#endregion
+
+		#region IDisposable Implementation
+
+		/// <summary>
+		///     Releases the unmanaged resources used by this instance and optionally
+		///     releases the managed resources.
+		/// </summary>
+		/// <param name="disposing">
+		///     If true, the method has been called directly or indirectly by a user's code.
+		///     Managed and unmanaged resources can be disposed. If false, the method has been
+		///     called by the runtime from inside the finalizer and you should not reference
+		///     other objects. Only unmanaged resources can be disposed.
+		/// </param>
+		protected override void Dispose(bool disposing)
+		{
+			// Check to see if Dispose() has already been called.
+			if (!_disposed)
+			{
+				// Check to see if managed resources need to be disposed of.
+				if (disposing)
+				{
+					if (_cn is not null)
+					{
+						_cn.Dispose();
+						_cn = null;
+					}
+
+					// Nullify references to managed resources that are not disposable.
+
+					// Nullify references to externally created managed resources.
+				}
+
+#if USES_UNMANGED_CODE
+				// Dispose of unmanaged resources here.
+#endif
+			}
+
+			base.Dispose(disposing);
+		}
 
 		#endregion
 
@@ -54,19 +106,19 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		{
 			get
 			{
-				if (_filestreamTransactionContext == null)
+				if (_filestreamTransactionContext is null)
 				{
-					if (!TransactionExists && !AmbientTransactionExists)
+					if (Transaction is null && !AmbientTransactionExists)
 					{
 						throw new InvalidOperationException("An explicit or ambient transaction is required.");
 					}
 
 					using (SqlDbCommand cmd = CreateTextCommand("SELECT GET_FILESTREAM_TRANSACTION_CONTEXT();"))
 					{
-						_filestreamTransactionContext = (byte[])cmd.ExecuteScalar();
+						_filestreamTransactionContext = (byte[]?)cmd.ExecuteScalar();
 					}
 
-					if (_filestreamTransactionContext == null || _filestreamTransactionContext.Length == 0)
+					if (_filestreamTransactionContext is null || _filestreamTransactionContext.Length == 0)
 					{
 						throw new InvalidOperationException("Unable to obtain a FILESTREAM transaction context.");
 					}
@@ -83,7 +135,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		{
 			get
 			{
-				if (_filestreamTransactionContextStack == null)
+				if (_filestreamTransactionContextStack is null)
 				{
 					_filestreamTransactionContextStack = new Stack<byte[]>();
 				}
@@ -95,48 +147,98 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// <summary>
 		///		Gets a value indicating that the FILESTREAM transaction context stack is empty.
 		/// </summary>
-		private bool FilestreamTransactionContextStackIsEmpty { get { return _filestreamTransactionContextStack == null || _filestreamTransactionContextStack.Count == 0; } }
+		private bool FilestreamTransactionContextStackIsEmpty =>
+			(_filestreamTransactionContextStack is null || _filestreamTransactionContextStack.Count == 0);
 
 		#endregion
 
-		#region Protected Overrides
+		#region DbFactory Implementation
 
 		#region Connection
 
 		/// <summary>
-		///     Gets the default connection timeout.
+		///		Gets the connection object of this instance.
 		/// </summary>
-		protected internal override int DefaultConnectionTimeout
+		protected internal override SqlConnection Connection
 		{
-			get { return DEFAULT_CONNECTION_TIMEOUT; }
+			get
+			{
+				if (_cn is null)
+				{
+#if ENABLE_CONNECTION_TIMEOUT
+					DbConnectionStringBuilder csb = SqlClientFactory.Instance.CreateConnectionStringBuilder();
+					csb.ConnectionString = ConnectionString;
+					csb["Connection Timeout"] = _connectionTimeout;
+
+					_cn = new(csb.ConnectionString);
+#else
+					_cn = new(ConnectionString);
+#endif
+				}
+
+				return _cn;
+			}
 		}
 
+#if ENABLE_CONNECTION_TIMEOUT
 		/// <summary>
-		///		Executes before the current connection object is destroyed.
+		///		Gets the connection timeout value.
 		/// </summary>
-		protected override void DestroyingConnection()
+		public override int ConnectionTimeout
 		{
-			_filestreamTransactionContext = null;
-			_filestreamTransactionContextStack = null;
+			get => _connectionTimeout;
+
+			set
+			{
+				_connectionTimeout = value;
+				_cn = null;
+			}
 		}
+#endif
 
 		/// <summary>
-		///		Gets a connection string.
+		///		Gets the <see cref="T:DbProviderFactory"/> for the database provider.
 		/// </summary>
-		/// <param name="connectionStringName">The name of the connection string</param>
-		/// <returns></returns>
-		protected override ConnectionStringSettings GetConnectionStringSettings(string connectionStringName)
-		{
-			return ConfigurationManager.ConnectionStrings[connectionStringName];
-		}
-
-		/// <summary>
-		///		Gets an instance of the <see cref="T:SqlClientFactory"/>.
-		/// </summary>
-		/// <returns></returns>
+		/// <returns>
+		///		The <see cref="T:DbProviderFactory"/> for the database provider.
+		///	</returns>
 		protected override DbProviderFactory GetDbProviderFactory()
 		{
 			return SqlClientFactory.Instance;
+		}
+
+		#endregion
+
+		#region Create Command Methods
+
+		/// <summary>
+		///		Create Command object.
+		/// </summary>
+		/// <param name="commandText">The command string.</param>
+		/// <returns></returns>
+		public override SqlDbCommand CreateStoredProcedureCommand(string commandText)
+		{
+			return new(this, commandText, CommandType.StoredProcedure, false);
+		}
+
+		/// <summary>
+		///		Create Command object.
+		/// </summary>
+		/// <param name="commandText">The command string.</param>
+		/// <returns></returns>
+		public override SqlDbCommand CreateTableDirectCommand(string commandText)
+		{
+			return new(this, commandText, CommandType.TableDirect, false);
+		}
+
+		/// <summary>
+		///		Create Command object.
+		/// </summary>
+		/// <param name="commandText">The command string.</param>
+		/// <returns></returns>
+		public override SqlDbCommand CreateTextCommand(string commandText)
+		{
+			return new(this, commandText, CommandType.Text, false);
 		}
 
 		#endregion
@@ -150,7 +252,6 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// </summary>
 		/// <param name="queueName">An existing SQL Server Service Broker queue to be used. If
 		///		<b>null</b>, the default queue is used.</param>
-		[SqlClientPermission(SecurityAction.Demand, Unrestricted = true)]
 		public void DependencyStart(string queueName)
 		{
 			SqlDependency.Start(Connection.ConnectionString, queueName);
@@ -162,7 +263,6 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// </summary>
 		/// <param name="queueName">The SQL Server Service Broker queue that was used in a previous
 		///		<see cref="M:DependencyStart"/> call.</param>
-		[SqlClientPermission(SecurityAction.Demand, Unrestricted = true)]
 		public void DependencyStop(string queueName)
 		{
 			SqlDependency.Stop(Connection.ConnectionString, queueName);
@@ -190,7 +290,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// </summary>
 		protected override void PushTransaction()
 		{
-			if (TransactionExists)
+			if (Transaction is not null && _filestreamTransactionContext is not null)
 			{
 				FilestreamTransactionContextStack.Push(_filestreamTransactionContext);
 				_filestreamTransactionContext = null;
@@ -292,11 +392,11 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		/// </returns>
 		public IAsyncResult BeginNotificationListener(string queueName, int timeout, Action<Exception> exceptionCallback)
 		{
-			if (exceptionCallback == null) { throw new ArgumentNullException(nameof(exceptionCallback)); }
+			if (exceptionCallback is null) { throw new ArgumentNullException(nameof(exceptionCallback)); }
 
 			EnsureServiceBroker();
 
-			if (NotificationReceived == null)
+			if (NotificationReceived is null)
 			{
 				throw new InvalidOperationException($"The NotificationReceived event has no subscribers.");
 			}
@@ -524,7 +624,7 @@ namespace openSourceC.DotNetLibrary.Data.SqlClient
 		///		to which to roll back.</param>
 		public void Rollback(string transactionName)
 		{
-			if (!TransactionExists)
+			if (Transaction is null)
 			{
 				throw new OscErrorException("Not in a transaction");
 			}

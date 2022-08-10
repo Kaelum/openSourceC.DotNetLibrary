@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU;x86;x64</Platforms>
+    <Platforms>AnyCPU;x86;x64;ARM64</Platforms>
     <RootNamespace>openSourceC.DotNetLibrary</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -14,36 +15,47 @@
     <AssemblyOriginatorKeyFile>..\.resources\openSourceC.DotNetLibrary.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
+    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DefineConstants>DEBUG;TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>openSourceC.DotNetLibrary.Data.SqlClient.xml</DocumentationFile>
-    <DefineConstants>_ALLOW_PREFIX_OVERRIDES _SUPPORT_ASYNC_EXECUTE_READER _SUPPORT_SQL_FILESTREAM _SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <DefineConstants>TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <DefineConstants>TRACE;_ALLOW_PREFIX_OVERRIDES;_SUPPORT_ASYNC_EXECUTE_READER;_SUPPORT_SQL_FILESTREAM;_SUPPORT_SQL_NOTIFICATION</DefineConstants>
+    <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,8 +68,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
-    <PackageReference Include="System.Security.Permissions" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
