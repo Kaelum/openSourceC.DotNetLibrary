@@ -31,7 +31,6 @@ namespace openSourceC.DotNetLibrary
 		public static List<string?>? CSVLine(int line, string text, int capacity = 0, int version = 0)
 		{
 			List<string?> columns = new(capacity);
-			int columnIndex = 0;
 
 			FieldType fieldType = FieldType.Unknown;
 			int lastCommaPos = -1;
@@ -39,9 +38,18 @@ namespace openSourceC.DotNetLibrary
 			int closeQuotePos = -1;
 
 
-			for (int i = 0; i <= text.Length; i++)
+			for (int index = 0; index <= text.Length; index++)
 			{
-				if (i == text.Length || text[i] == ',')
+				if (
+					index == text.Length
+					|| (
+						text[index] == ','
+						&& (
+							(openQuotePos == -1 && closeQuotePos == -1)
+							|| (openQuotePos != -1 && closeQuotePos != -1)
+						)
+					)
+				)
 				{
 					switch (fieldType)
 					{
@@ -52,64 +60,64 @@ namespace openSourceC.DotNetLibrary
 								throw new FormatException($"Import line {line} [{text}]: closing double-quote not found.");
 							}
 
-							columns[columnIndex++] = text.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim();
+							columns.Add(text.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim());
 							break;
 						}
 
 						case FieldType.Numeric:
 						{
-							columns[columnIndex++] = text.Substring(lastCommaPos + 1, i - lastCommaPos - 1).Trim();
+							columns.Add(text.Substring(lastCommaPos + 1, index - lastCommaPos - 1).Trim());
 							break;
 						}
 
 						default:
 						{
-							columns[columnIndex++] = null;
+							columns.Add(null);
 							break;
 						}
 					}
 
 					fieldType = FieldType.Unknown;
-					lastCommaPos = i;
+					lastCommaPos = index;
 					openQuotePos = -1;
 					closeQuotePos = -1;
 					continue;
 				}
 
-				if (text[i] == ' ')
+				if (text[index] == ' ')
 				{
 					continue;
 				}
 
-				if (text[i] == '"')
+				if (text[index] == '"')
 				{
 					if (fieldType != FieldType.Alphanumeric && fieldType != FieldType.Unknown)
 					{
-						throw new FormatException($"Import line {line} [{text}]: unexpected double-quote found at position {i + 1}.");
+						throw new FormatException($"Import line {line} [{text}]: unexpected double-quote found at position {index + 1}.");
 					}
 
 					if (openQuotePos == -1)
 					{
 						fieldType = FieldType.Alphanumeric;
 
-						openQuotePos = i;
+						openQuotePos = index;
 						continue;
 					}
 
 					if (closeQuotePos == -1)
 					{
 						// Check for double double-quotes within alphanumeric text.
-						if (i + 1 < text.Length && text[i + 1] == '"')
+						if (index + 1 < text.Length && text[index + 1] == '"')
 						{
-							i++;
+							index++;
 							continue;
 						}
 
-						closeQuotePos = i;
+						closeQuotePos = index;
 						continue;
 					}
 
-					throw new FormatException($"Import line {line}: extra double-quote found at position {i + 1}.");
+					throw new FormatException($"Import line {line}: extra double-quote found at position {index + 1}.");
 				}
 
 				if (fieldType == FieldType.Unknown && openQuotePos == -1)
