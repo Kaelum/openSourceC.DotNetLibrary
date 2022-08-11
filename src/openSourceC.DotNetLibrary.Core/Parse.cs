@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace openSourceC.DotNetLibrary
 {
-	/// <summary>
-	///		PopulateDetailField definition.
-	/// </summary>
-	public delegate void PopulateDetailField(IParserDetail detail, int exportVersion, int fieldNo, string? fieldValue);
-
 	/// <summary>
 	/// Summary description for Parse.
 	/// </summary>
@@ -26,24 +20,28 @@ namespace openSourceC.DotNetLibrary
 		/// <summary>
 		///		Parse a CSV line.
 		/// </summary>
-		/// <param name="populateDetailField">Delegate method that populates a field of the detail parameter.</param>
-		/// <param name="detail">The detail object to be populated.</param>
-		/// <param name="importVersion">Version of the import file format .</param>
-		public static void CSVLine(PopulateDetailField populateDetailField, IParserDetail detail, int importVersion)
+		/// <param name="line">The line number.</param>
+		/// <param name="text">The line text.</param>
+		/// <param name="capacity">The number of columns that are expected.  (Default: 0)</param>
+		/// <param name="version">File format version. (Default: 0)</param>
+		/// <returns>
+		///		A <see cref="T:List&lt;T&gt;"/> of strings, which contains the values of each of the
+		///		CSV columns, or null, if unable to parse any values.
+		/// </returns>
+		public static List<string?>? CSVLine(int line, string text, int capacity = 0, int version = 0)
 		{
-			int currentField = 0;
-			string? fieldValue;
+			List<string?> columns = new(capacity);
+			int columnIndex = 0;
 
 			FieldType fieldType = FieldType.Unknown;
 			int lastCommaPos = -1;
 			int openQuotePos = -1;
 			int closeQuotePos = -1;
-			int i = -1;
 
 
-			for (i = 0; i <= detail.LineText.Length; i++)
+			for (int i = 0; i <= text.Length; i++)
 			{
-				if (i == detail.LineText.Length || detail.LineText[i] == ',')
+				if (i == text.Length || text[i] == ',')
 				{
 					switch (fieldType)
 					{
@@ -51,29 +49,26 @@ namespace openSourceC.DotNetLibrary
 						{
 							if (closeQuotePos == -1)
 							{
-								throw new ApplicationException(string.Format("Import detail.LineText {0}: closing double-quote not found.", detail.LineNo));
+								throw new FormatException($"Import line {line} [{text}]: closing double-quote not found.");
 							}
 
-							fieldValue = detail.LineText.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim();
+							columns[columnIndex++] = text.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim();
 							break;
 						}
 
 						case FieldType.Numeric:
 						{
-							fieldValue = detail.LineText.Substring(lastCommaPos + 1, i - lastCommaPos - 1).Trim();
+							columns[columnIndex++] = text.Substring(lastCommaPos + 1, i - lastCommaPos - 1).Trim();
 							break;
 						}
 
 						default:
 						{
-							fieldValue = null;
+							columns[columnIndex++] = null;
 							break;
 						}
 					}
 
-					populateDetailField(detail, importVersion, currentField, fieldValue);
-
-					currentField++;
 					fieldType = FieldType.Unknown;
 					lastCommaPos = i;
 					openQuotePos = -1;
@@ -81,16 +76,16 @@ namespace openSourceC.DotNetLibrary
 					continue;
 				}
 
-				if (detail.LineText[i] == ' ')
+				if (text[i] == ' ')
 				{
 					continue;
 				}
 
-				if (detail.LineText[i] == '"')
+				if (text[i] == '"')
 				{
 					if (fieldType != FieldType.Alphanumeric && fieldType != FieldType.Unknown)
 					{
-						throw new ApplicationException(string.Format("Import detail.LineText {0}: unexpected double-quote found at position {1}.", detail.LineNo, i + 1));
+						throw new FormatException($"Import line {line} [{text}]: unexpected double-quote found at position {i + 1}.");
 					}
 
 					if (openQuotePos == -1)
@@ -103,7 +98,8 @@ namespace openSourceC.DotNetLibrary
 
 					if (closeQuotePos == -1)
 					{
-						if (i + 1 < detail.LineText.Length && detail.LineText[i + 1] == '"')
+						// Check for double double-quotes within alphanumeric text.
+						if (i + 1 < text.Length && text[i + 1] == '"')
 						{
 							i++;
 							continue;
@@ -113,7 +109,7 @@ namespace openSourceC.DotNetLibrary
 						continue;
 					}
 
-					throw new OscErrorException(string.Format("Import line {0}: extra double-quote found at position {1}.", detail.LineNo, i + 1));
+					throw new FormatException($"Import line {line}: extra double-quote found at position {i + 1}.");
 				}
 
 				if (fieldType == FieldType.Unknown && openQuotePos == -1)
@@ -121,7 +117,15 @@ namespace openSourceC.DotNetLibrary
 					fieldType = FieldType.Numeric;
 				}
 			}
+
+			if (columns.Count == 0)
+			{
+				return null;
+			}
+
+			return columns;
 		}
+
 		/// <summary>
 		///		Converts a Guid string to a <see cref="Nullable&lt;Guid&gt;"/>.
 		/// </summary>
@@ -142,6 +146,20 @@ namespace openSourceC.DotNetLibrary
 			{
 				return null;
 			}
+		}
+
+		/// <summary>
+		///		Converts the string representation of a logical value to its <see cref="T:bool"/>
+		///		equivalent.</summary>
+		/// <param name="s">A string containing the value to convert.</param>
+		/// <returns>
+		///		A nullable <see cref="T:bool"/> equivalent to the logical value contained in s, if
+		///		the conversion succeeded, and null if the conversion failed. The conversion fails if
+		///		the s parameter is not of the correct format.
+		///	</returns>
+		public static bool? NullableBool(string? s)
+		{
+			return (TryNullableBool(s, out bool? result) ? result : null);
 		}
 
 		/// <summary>
@@ -299,8 +317,43 @@ namespace openSourceC.DotNetLibrary
 		}
 
 		/// <summary>
+		///		Converts the string representation of a logical value to its <see cref="T:bool"/>
+		///		equivalent. The return value indicates whether the operation succeeded.</summary>
+		/// <param name="s">A string containing the value to convert.</param>
+		/// <param name="nullableResult">When this method returns, contains the nullable
+		///		<see cref="T:bool"/> equivalent to the logical value contained in s, if the
+		///		conversion succeeded, or null if the conversion failed. The conversion fails if the
+		///		s parameter is not of the correct format. This parameter is passed uninitialized.</param>
+		/// <returns>
+		///		true if s was converted successfully; otherwise, false.
+		///	</returns>
+		public static bool TryNullableBool(string? s, out bool? nullableResult)
+		{
+			if (string.IsNullOrEmpty(s))
+			{
+				nullableResult = null;
+				return true;
+			}
+
+			if (bool.TryParse(s, out bool result))
+			{
+				nullableResult = result;
+				return true;
+			}
+
+			if (TryNullableInt(s, out int? intResult))
+			{
+				nullableResult = (intResult != 0);
+				return true;
+			}
+
+			nullableResult = null;
+			return false;
+		}
+
+		/// <summary>
 		///		Converts the string representation of a number to its 32-bit signed integer
-		///		equivalent. A return value indicates whether the operation succeeded.</summary>
+		///		equivalent. The return value indicates whether the operation succeeded.</summary>
 		/// <param name="s">A string containing a number to convert. </param>
 		/// <param name="nullableResult">When this method returns, contains the nullable 32-bit
 		///		signed integer value equivalent to the number contained in s, if the conversion
@@ -318,7 +371,7 @@ namespace openSourceC.DotNetLibrary
 
 		/// <summary>
 		///		Converts the string representation of a number in a specified style and
-		///		culture-specific format to its 32-bit signed integer equivalent. A return value
+		///		culture-specific format to its 32-bit signed integer equivalent. The return value
 		///		indicates whether the operation succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a number to convert.</param>
@@ -362,7 +415,7 @@ namespace openSourceC.DotNetLibrary
 
 		/// <summary>
 		///		Converts the string representation of a number to its 64-bit signed integer
-		///		equivalent. A return value indicates whether the operation succeeded.
+		///		equivalent. The return value indicates whether the operation succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a number to convert. </param>
 		/// <param name="nullableResult">When this method returns, contains the nullable 64-bit
@@ -381,7 +434,7 @@ namespace openSourceC.DotNetLibrary
 
 		/// <summary>
 		///		Converts the string representation of a number in a specified style and
-		///		culture-specific format to its 64-bit signed integer equivalent. A return value
+		///		culture-specific format to its 64-bit signed integer equivalent. The return value
 		///		indicates whether the operation succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a number to convert.</param>
@@ -422,22 +475,5 @@ namespace openSourceC.DotNetLibrary
 			nullableResult = null;
 			return false;
 		}
-	}
-
-	/// <summary>
-	///		The IParserDetail interface needs to be implemented by any data item
-	///		that will be populated during a parsing procedure.
-	/// </summary>
-	public interface IParserDetail
-	{
-		/// <summary>
-		///		Gets or sets the line number of the import file.
-		/// </summary>
-		int LineNo { get; set; }
-
-		/// <summary>
-		///		Gets or sets the line of text from the import file.
-		/// </summary>
-		string LineText { get; set; }
 	}
 }
